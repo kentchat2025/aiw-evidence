@@ -1,0 +1,10 @@
+**/.env
+**/*.env
+**/env/
+**/secrets*
+**/*secret*
+**/*token*
+**/*par*
+**/*.key
+**/id_rsa*
+**/*.pem
