@@ -8,3 +8,4 @@
 **/*.key
 **/id_rsa*
 **/*.pem
+tools/*.bak_*
