@@ -1,0 +1,1 @@
+OCI CLI not installed/configured on this VM
