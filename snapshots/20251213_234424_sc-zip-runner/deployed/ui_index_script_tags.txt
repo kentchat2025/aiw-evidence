@@ -1,0 +1,8 @@
+639:<script>
+2090:<script src="fc_tile_common_v1.js"></script>
+2091:<script src="aiw-settings.js"></script>
+2092:<script src="aiw-data-universe.js"></script>
+2093:<script src="fc_techlog_v1.js"></script>
+2094:<script src="aiw_brain_overview_v1.js"></script>
+2095:<script>
+2096:<script>

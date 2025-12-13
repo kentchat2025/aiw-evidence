@@ -1,0 +1,8 @@
+{
+  "status": "ok",
+  "note": "skeleton validation from run_aiw_validation.sh",
+  "roi_kpis": {
+    "alpha": 0.15,
+    "win_rate": "64%"
+  }
+}
