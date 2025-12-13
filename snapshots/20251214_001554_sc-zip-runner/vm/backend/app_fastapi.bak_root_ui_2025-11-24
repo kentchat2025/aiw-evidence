@@ -1,0 +1,88 @@
+from pathlib import Path
+import json
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+
+app = FastAPI(title="FounderConsole Backend – Root UI + APIs v1")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+BASE_PATH = Path("/opt/founderconsole")
+RUNTIME_PATH = BASE_PATH / "runtime"
+ROOT_UI_FILE = BASE_PATH / "root-ui" / "index.html"
+
+
+@app.get("/health")
+def health():
+    """Simple backend health check."""
+    return {"status": "ok", "component": "founderconsole-backend-root-ui-v1"}
+
+
+def _load_runtime_json(filename: str):
+    """
+    Helper to read JSON files from /opt/founderconsole/runtime.
+    """
+    path = RUNTIME_PATH / filename
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=f"{filename} not found in runtime")
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"error reading {filename}: {e}")
+
+
+@app.get("/api/readiness/readiness")
+def readiness():
+    """
+    Returns go-live readiness JSON written by:
+    /opt/founderconsole/tests/generate_readiness.py
+    """
+    return _load_runtime_json("go_live_readiness.json")
+
+
+@app.get("/api/aiwealth/validation")
+def aiwealth_validation():
+    """
+    Returns AI Wealth validation JSON written by:
+    /opt/founderconsole/scripts/run_aiw_validation.sh
+    """
+    return _load_runtime_json("aiw_validation_report.json")
+
+
+@app.get("/api/security/report")
+def security_report():
+    """
+    Returns security_report.json written by:
+    /opt/founderconsole/checks/verify_security.py
+    """
+    return _load_runtime_json("security_report.json")
+
+
+@app.get("/", response_class=HTMLResponse)
+def root_ui():
+    """
+    Serve the FounderConsole Root UI (single HTML file).
+    This reads /opt/founderconsole/root-ui/index.html that you just created.
+    """
+    if ROOT_UI_FILE.exists():
+        try:
+            html = ROOT_UI_FILE.read_text(encoding="utf-8")
+            return HTMLResponse(html)
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=f"Error reading root UI: {exc}")
+
+    # Fallback if the file is missing
+    return HTMLResponse(
+        "<h1>FounderConsole Root UI</h1>"
+        "<p>index.html not found in /opt/founderconsole/root-ui</p>",
+        status_code=500,
+    )
+
