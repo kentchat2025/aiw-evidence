@@ -43,6 +43,7 @@ safe_rsync() {
     rsync -a \
       --exclude ".env" --exclude "*.env" --exclude "env/" --exclude "secrets*" \
       --exclude "*token*" --exclude "*.key" --exclude "*.pem" --exclude "id_rsa*" \
+        --exclude "__pycache__" --exclude "*.pyc" \
       "$src/" "$dst/" || true
   fi
 }
