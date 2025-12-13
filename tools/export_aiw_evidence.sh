@@ -53,6 +53,22 @@ cmd_to_file() {
   ( "$@" ) >"$outfile" 2>&1 || true
 }
 
+
+push_retry() {
+  local tries=0
+  while true; do
+    tries=1
+    git push && return 0
+    if [ "" -ge 3 ]; then
+      echo "[AIW-EVIDENCE] git push failed after 3 tries" >&2
+      return 1
+    fi
+    echo "[AIW-EVIDENCE] git push failed, retrying in 3s..." >&2
+    sleep 3
+  done
+}
+
+
 mkdir -p "$OUT_DIR" "${EVIDENCE_REPO_DIR}/deployed-proof" "${EVIDENCE_REPO_DIR}/oci/manifests"
 mkdir -p "$OUT_DIR/oci"
 
@@ -114,6 +130,6 @@ SUM
 cd "$EVIDENCE_REPO_DIR"
 git add -A
 git commit -m "Evidence snapshot $TS ($HOST_TAG)" || true
-git push
+push_retry
 
 echo "DONE: wrote snapshot -> $OUT_DIR"
