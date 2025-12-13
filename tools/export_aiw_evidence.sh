@@ -88,7 +88,7 @@ cmd_to_file "$OUT_DIR/deployed/be_app_fastapi_sha256.txt" docker exec "$BE_CONTA
 # 4) OCI MANIFESTS (object list; NO PAR URLs)
 if oci_ok; then
   for B in "${OCI_BUCKETS[@]}"; do
-    cmd_to_file "$OUT_DIR/oci/${B}_list.json" oci os object list --bucket-name "$B" --prefix "$OCI_PREFIX" --all
+    cmd_to_file "$OUT_DIR/oci/${B}_list.json" OCI_CLI_AUTH=instance_principal oci os object list --bucket-name "$B" --prefix "$OCI_PREFIX" --all
   done
 else
   echo "OCI CLI not installed/configured on this VM" > "$OUT_DIR/oci/oci_cli_missing.txt"
