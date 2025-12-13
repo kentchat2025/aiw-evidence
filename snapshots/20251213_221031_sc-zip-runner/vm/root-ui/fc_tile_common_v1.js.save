@@ -1,0 +1,206 @@
+// fc_tile_common_v1.js
+// Common "function module" helpers for all FounderConsole tiles.
+// Provides standard toolbar (Refresh, CSV, JSON, Filter) and
+// a generic table renderer with click-to-sort and optional per-column filters.
+// Shared helpers + registry for FounderConsole tiles
+
+(function () {
+  // NEVER reset the registry – only create it if missing
+  if (!window.FC_TILES) {
+    window.FC_TILES = {};
+  }
+(function () {
+  function downloadCSV(rows, filenamePrefix) {
+    if (!Array.isArray(rows) || rows.length === 0) {
+      alert("No data to export.");
+      return;
+    }
+    const cols = Object.keys(rows[0]);
+    const header = cols.join(",");
+    const lines = rows.map((row) =>
+      cols
+        .map((k) => {
+          const v = row[k] == null ? "" : String(row[k]);
+          const escaped = v.replace(/"/g, '""');
+          return `"${escaped}"`;
+        })
+        .join(",")
+    );
+    const csv = [header].concat(lines).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (filenamePrefix || "export") + ".csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadJSON(rows, filenamePrefix) {
+    const json = JSON.stringify(rows || [], null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (filenamePrefix || "export") + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function attachToolbarAndFilter(metaEl, options) {
+    const { onRefresh, getRows, filenamePrefix } = options;
+
+    const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.flexWrap = "wrap";
+    wrapper.style.alignItems = "center";
+    wrapper.style.gap = "8px";
+    wrapper.style.margin = "8px 0";
+
+    const refreshBtn = document.createElement("button");
+    refreshBtn.textContent = "Refresh";
+    refreshBtn.className = "pill-button";
+    refreshBtn.onclick = () => {
+      if (typeof onRefresh === "function") onRefresh();
+    };
+    wrapper.appendChild(refreshBtn);
+
+    const csvBtn = document.createElement("button");
+    csvBtn.textContent = "Download CSV";
+    csvBtn.className = "pill-button";
+    csvBtn.onclick = () => {
+      const rows = (typeof getRows === "function" && getRows()) || [];
+      downloadCSV(rows, filenamePrefix || "export");
+    };
+    wrapper.appendChild(csvBtn);
+
+    const jsonBtn = document.createElement("button");
+    jsonBtn.textContent = "Download JSON";
+    jsonBtn.className = "pill-button";
+    jsonBtn.onclick = () => {
+      const rows = (typeof getRows === "function" && getRows()) || [];
+      downloadJSON(rows, filenamePrefix || "export");
+    };
+    wrapper.appendChild(jsonBtn);
+
+    const filterLabel = document.createElement("span");
+    filterLabel.textContent = "Filter (all columns):";
+    wrapper.appendChild(filterLabel);
+
+    const filterInput = document.createElement("input");
+    filterInput.type = "text";
+    filterInput.placeholder = "Type to filter…";
+    filterInput.style.minWidth = "200px";
+    filterInput.oninput = () => {
+      if (typeof options.onFilterChange === "function") {
+        options.onFilterChange(filterInput.value || "");
+      }
+    };
+    wrapper.appendChild(filterInput);
+
+    metaEl.appendChild(wrapper);
+  }
+
+  /**
+   * Render table with optional per-column filters.
+   *
+   * @param container DOM element
+   * @param cols      [{ key, label }]
+   * @param rows      data rows
+   * @param sortState { key, asc }
+   * @param onSortChange function (key, asc)
+   * @param options   {
+   *    enableColumnFilters?: boolean,
+   *    onColumnFilterChange?: (colKey, value) => void
+   *  }
+   */
+  function renderSortableTable(
+    container,
+    cols,
+    rows,
+    sortState,
+    onSortChange,
+    options
+  ) {
+    if (!Array.isArray(rows) || rows.length === 0) {
+      container.innerHTML =
+        "<p>No data yet. Once we log more artefacts for this tile, rows will appear here.</p>";
+      return;
+    }
+
+    const opts = options || {};
+
+    const table = document.createElement("table");
+    table.className = "detail-table";
+
+    const thead = document.createElement("thead");
+
+    // Header row (labels + sort)
+    const headRow = document.createElement("tr");
+    cols.forEach((col) => {
+      const th = document.createElement("th");
+      th.textContent = col.label;
+      th.style.cursor = "pointer";
+
+      th.onclick = () => {
+        let asc = true;
+        if (sortState.key === col.key) {
+          asc = !sortState.asc;
+        }
+        onSortChange(col.key, asc);
+      };
+
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+
+    // Second header row: per-column filters (if enabled)
+    if (opts.enableColumnFilters && typeof opts.onColumnFilterChange === "function") {
+      const filterRow = document.createElement("tr");
+      cols.forEach((col) => {
+        const th = document.createElement("th");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Filter " + col.label;
+        input.style.width = "100%";
+        input.style.boxSizing = "border-box";
+        input.oninput = () => {
+          opts.onColumnFilterChange(col.key, input.value || "");
+        };
+        th.appendChild(input);
+        filterRow.appendChild(th);
+      });
+      thead.appendChild(filterRow);
+    }
+
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    rows.forEach((row) => {
+      const tr = document.createElement("tr");
+      cols.forEach((col) => {
+        const td = document.createElement("td");
+        td.textContent = row[col.key] == null ? "" : String(row[col.key]);
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+
+    container.innerHTML = "";
+    container.appendChild(table);
+  }
+
+  window.FC_TILE_COMMON = {
+    attachToolbarAndFilter,
+    renderSortableTable,
+    downloadCSV,
+    downloadJSON,
+  };
+})();
+
