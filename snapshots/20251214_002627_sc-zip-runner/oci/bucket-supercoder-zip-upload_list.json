@@ -1,0 +1,305 @@
+{
+  "data": [
+    {
+      "archival-state": null,
+      "etag": "1fc9e82e-3f74-4080-8f63-3a2dc922a373",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/AIWealth/.keep",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-04T10:18:09.492000+00:00",
+      "time-modified": "2025-11-04T16:17:09.591000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "7253a9e6-638e-4b05-864e-b2770c07809c",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/Billing/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-06T10:43:15.706000+00:00",
+      "time-modified": "2025-11-06T10:43:15.706000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "14960db5-2f16-41a7-ad89-ea47e5071f0a",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/FounderConsole/.keep",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-04T10:18:11.070000+00:00",
+      "time-modified": "2025-11-04T16:17:11.983000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "68391181-988b-43ae-9fd9-0a681275ebd9",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/FounderConsole/Data/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T08:16:19.819000+00:00",
+      "time-modified": "2025-11-10T08:16:19.819000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "925e9b83-2564-407b-850e-75b61d610d13",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/Health/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:21:35.695000+00:00",
+      "time-modified": "2025-11-10T06:21:35.695000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "3ee1bcd9-6be0-499d-b8a3-f4610f07190b",
+      "md5": "GHxl9qIozscQCwJtU99Png==",
+      "name": "Development/Health/founderconsole-security-baseline-full-v2.zip",
+      "size": 2265,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-13T16:43:21.459000+00:00",
+      "time-modified": "2025-11-13T16:43:21.459000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "506ee10f-e4e7-49e6-88ad-ac3d9357f0ff",
+      "md5": "v7o76xWa1zSsw2Mcxi2BcQ==",
+      "name": "Development/Health/security-baseline-full-v4.zip",
+      "size": 2322,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-13T16:04:20.366000+00:00",
+      "time-modified": "2025-11-13T16:04:20.366000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "6977023b-36b2-4fc6-a611-bff22448a91c",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/NPM/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-06T10:42:55.908000+00:00",
+      "time-modified": "2025-11-06T10:42:55.908000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "64990ce6-a454-4d55-9a2d-a0cf03f459f9",
+      "md5": "tDlgo/ZPwJespSweD/Vorw==",
+      "name": "Development/NPM/npm-declarative-hosts.zip",
+      "size": 2863,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:24:24.174000+00:00",
+      "time-modified": "2025-11-10T06:24:24.174000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "01f1100d-1d5e-4c47-a309-5e06d3c2b501",
+      "md5": "9TBFKpOXTwVQQ3ATTNg1vg==",
+      "name": "Development/NPM/npm-ssl-cleanup-and-ops.zip",
+      "size": 2816,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:24:44.678000+00:00",
+      "time-modified": "2025-11-10T06:24:44.678000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "abe66b89-a201-4c63-b110-f175dee7e500",
+      "md5": "ug1KPlOWNIAUa049kPxlNg==",
+      "name": "Development/NPM/npm-ssl-cleanup-runbook.zip",
+      "size": 3135,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:25:08.355000+00:00",
+      "time-modified": "2025-11-10T06:25:08.355000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "c8704fcf-ee7c-4068-9128-3d75406bc8b9",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/Observability/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-06T10:42:35.014000+00:00",
+      "time-modified": "2025-11-06T10:42:35.014000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "294c2b5f-bcb0-488c-86c0-2d346514d784",
+      "md5": "8xpkHi8/dEWlEPm3iJ1syg==",
+      "name": "Development/Observability/observability.zip",
+      "size": 2390,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:40:10.189000+00:00",
+      "time-modified": "2025-11-10T06:40:10.189000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "7876eec9-c965-429e-b7e8-7fcdbfeb65af",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/Ops/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T05:43:52.457000+00:00",
+      "time-modified": "2025-11-10T05:43:52.457000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "969e9891-0168-4086-b58f-2c90d65be9dc",
+      "md5": "YMtmdpgncE6FPmYmKlZRDA==",
+      "name": "Development/Ops/env-templates-all.zip",
+      "size": 3746,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:23:38.808000+00:00",
+      "time-modified": "2025-11-10T06:23:38.808000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "7ba37712-18ce-43b8-a667-316bd1704d32",
+      "md5": "kGvFn4eT07NeTKE4essMww==",
+      "name": "Development/Ops/ops-env-manager.zip",
+      "size": 1001,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:23:54.839000+00:00",
+      "time-modified": "2025-11-10T06:23:54.839000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "e43fb75d-6981-44d7-8ca4-7fe2b3cddf5b",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/Supercoder/.keep",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-04T10:18:12.543000+00:00",
+      "time-modified": "2025-11-04T16:17:15.132000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "288435fb-5d60-4014-be1c-c26680e7d46c",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Development/Tests/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:16:19.492000+00:00",
+      "time-modified": "2025-11-10T06:16:19.492000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "1c1509cf-bdea-4531-86d2-fde3bc3bec49",
+      "md5": "OqcQIaj4ixpRaf+xMIW5TQ==",
+      "name": "Development/Tests/health-endpoints.zip",
+      "size": 1505,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T08:16:05.322000+00:00",
+      "time-modified": "2025-11-10T08:16:05.322000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "b22512d1-79a8-4606-9a93-79aa4db304bd",
+      "md5": "2aZ6jLB0IBAqU6IjkzNBDQ==",
+      "name": "Development/Tests/policy-integration-test-suite.zip",
+      "size": 774,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:37:13.698000+00:00",
+      "time-modified": "2025-11-10T06:37:13.698000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "ebdca917-2d58-4d46-98e5-e1c2d2798af0",
+      "md5": "Hdb85VzlfHBF495snKvbUA==",
+      "name": "Development/Tests/tests-validation-full-v4.zip",
+      "size": 1638,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-13T16:04:22.518000+00:00",
+      "time-modified": "2025-11-13T16:04:22.518000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "e34edf03-49ae-4c8d-ac96-0cb8752a6165",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/AIWealth/.keep",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-04T16:17:10.824000+00:00",
+      "time-modified": "2025-11-04T16:17:10.824000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "19b08189-499c-4445-9683-3edca4149ad5",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/Billing/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-08T17:55:54.407000+00:00",
+      "time-modified": "2025-11-08T17:55:54.407000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "18212df4-b7f3-4a5c-9395-0a899b7e5f15",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/FounderConsole/.keep",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-04T16:17:13.956000+00:00",
+      "time-modified": "2025-11-04T16:17:13.956000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "83ceaebd-1094-4975-b3a2-67f3c028a83b",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/Health/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:21:53.087000+00:00",
+      "time-modified": "2025-11-10T06:21:53.087000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "15bf5280-265c-4097-9a0e-502fa177ce2d",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/NPM/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-08T17:55:46.250000+00:00",
+      "time-modified": "2025-11-08T17:55:46.250000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "8aebf51f-3515-4b74-bd32-52e41c969dbb",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/Observability/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-08T17:55:39.059000+00:00",
+      "time-modified": "2025-11-08T17:55:39.059000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "1c52f938-c7d4-48d6-a21d-46896f3d0eb7",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/Ops/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T05:44:04.331000+00:00",
+      "time-modified": "2025-11-10T05:44:04.331000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "19120bef-7d2a-46f6-b12e-b1f5a7f7a3e2",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/Supercoder/.keep",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-04T16:17:16.682000+00:00",
+      "time-modified": "2025-11-04T16:17:16.682000+00:00"
+    },
+    {
+      "archival-state": null,
+      "etag": "7c34b574-a633-4a77-bee4-c7ca85d4852f",
+      "md5": "1B2M2Y8AsgTpgAmY7PhCfg==",
+      "name": "Production/Tests/",
+      "size": 0,
+      "storage-tier": "Standard",
+      "time-created": "2025-11-10T06:16:30.209000+00:00",
+      "time-modified": "2025-11-10T06:16:30.209000+00:00"
+    }
+  ],
+  "prefixes": []
+}
