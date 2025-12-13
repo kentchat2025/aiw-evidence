@@ -3,10 +3,10 @@
 # --- AIW_EVIDENCE_OCI_CHECK_V2: make OCI manifests work safely (no secrets) ---
 export PATH=/home/ubuntu/bin:/usr/local/bin:/usr/bin:/bin:$PATH
 oci_ok() {
-  oci_ok >/dev/null 2>&1 || return 1
   OCI_CLI_AUTH=instance_principal oci os ns get --query "data" --raw-output >/dev/null 2>&1 || return 1
   return 0
 }
+
 # -----------------------------------------------------------------------------
 set -euo pipefail
 
