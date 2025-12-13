@@ -45,6 +45,7 @@ cmd_to_file() {
 }
 
 mkdir -p "$OUT_DIR" "${EVIDENCE_REPO_DIR}/deployed-proof" "${EVIDENCE_REPO_DIR}/oci/manifests"
+mkdir -p "$OUT_DIR/oci"
 
 # 1) VM SOURCE (proof of what you edit)
 safe_rsync "$VM_ROOT_UI"   "$OUT_DIR/vm/root-ui"
