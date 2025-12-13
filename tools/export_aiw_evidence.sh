@@ -51,7 +51,7 @@ safe_rsync() {
 cmd_to_file() {
   local outfile="$1"; shift
   mkdir -p "$(dirname "$outfile")"
-  ( "$@" ) >"$outfile" 2>&1 || true
+  ( env "$@" ) >"$outfile" 2>&1 || true
 }
 
 
