@@ -86,7 +86,7 @@ cmd_to_file "$OUT_DIR/deployed/be_ls.txt" docker exec "$BE_CONTAINER" sh -lc "ls
 cmd_to_file "$OUT_DIR/deployed/be_app_fastapi_sha256.txt" docker exec "$BE_CONTAINER" sh -lc "sha256sum /app/backend/app_fastapi.py 2>/dev/null || sha256sum /opt/founderconsole/backend/app_fastapi.py 2>/dev/null || true"
 
 # 4) OCI MANIFESTS (object list; NO PAR URLs)
-if oci_ok; then
+if oci_ok >/dev/null 2>&1; then
   for B in "${OCI_BUCKETS[@]}"; do
     cmd_to_file "$OUT_DIR/oci/${B}_list.json" oci os object list --bucket-name "$B" --prefix "$OCI_PREFIX" --all
   done
