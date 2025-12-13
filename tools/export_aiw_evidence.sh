@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+
+# --- AIW_EVIDENCE_OCI_CHECK_V2: make OCI manifests work safely (no secrets) ---
+export PATH=/home/ubuntu/bin:/usr/local/bin:/usr/bin:/bin:$PATH
+oci_ok() {
+  oci_ok >/dev/null 2>&1 || return 1
+  OCI_CLI_AUTH=instance_principal oci os ns get --query "data" --raw-output >/dev/null 2>&1 || return 1
+  return 0
+}
+# -----------------------------------------------------------------------------
 set -euo pipefail
 
 # ---------------------------
@@ -77,7 +86,7 @@ cmd_to_file "$OUT_DIR/deployed/be_ls.txt" docker exec "$BE_CONTAINER" sh -lc "ls
 cmd_to_file "$OUT_DIR/deployed/be_app_fastapi_sha256.txt" docker exec "$BE_CONTAINER" sh -lc "sha256sum /app/backend/app_fastapi.py 2>/dev/null || sha256sum /opt/founderconsole/backend/app_fastapi.py 2>/dev/null || true"
 
 # 4) OCI MANIFESTS (object list; NO PAR URLs)
-if command -v oci >/dev/null 2>&1; then
+if oci_ok >/dev/null 2>&1; then
   for B in "${OCI_BUCKETS[@]}"; do
     cmd_to_file "$OUT_DIR/oci/${B}_list.json" oci os object list --bucket-name "$B" --prefix "$OCI_PREFIX" --all
   done
