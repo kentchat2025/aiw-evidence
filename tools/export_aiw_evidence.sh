@@ -57,17 +57,22 @@ cmd_to_file() {
 
 push_retry() {
   local tries=0
+  local max="${PUSH_RETRY_MAX:-6}"
   while true; do
-    tries=1
-    git push && return 0
-    if [ "" -ge 3 ]; then
-      echo "[AIW-EVIDENCE] git push failed after 3 tries" >&2
+    # Always push from the repo dir (even if caller cwd is different)
+    if git -C "$EVIDENCE_REPO_DIR" push; then
+      return 0
+    fi
+    tries=$((tries+1))
+    echo "[AIW-EVIDENCE] git push failed, retrying in 3s..." >&2
+    if [ "$tries" -ge "$max" ]; then
+      echo "[AIW-EVIDENCE] git push failed after ${tries}/${max} tries" >&2
       return 1
     fi
-    echo "[AIW-EVIDENCE] git push failed, retrying in 3s..." >&2
     sleep 3
   done
 }
+
 
 
 mkdir -p "$OUT_DIR" "${EVIDENCE_REPO_DIR}/deployed-proof" "${EVIDENCE_REPO_DIR}/oci/manifests"
