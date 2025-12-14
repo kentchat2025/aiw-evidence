@@ -1,0 +1,27 @@
+{
+  "status": "OK",
+  "mode": "simulation-control-run-v1",
+  "aiwealth_backend_url": "https://aiwealth.kentechit.com",
+  "checks": [
+    "health_endpoint_ok",
+    "dns_ok",
+    "npm_routing_ok",
+    "ssl_ok"
+  ],
+  "summary": {
+    "run_date": "2025-12-14",
+    "env": "SIM",
+    "total_universe": 0,
+    "total_candidates": 0,
+    "creamy_layer_count": 0,
+    "profiles": [],
+    "profile_broker_map": {}
+  },
+  "proposed_trades": [],
+  "notes": [
+    "Simulation control run v1 using DB-backed tables.",
+    "Universe = distinct instruments in AIW_T_SIGNAL for 2025-12-14.",
+    "Creamy layer = AIW_A_CREAMY_LAYER, ENV=SIM, RUN_DATE=2025-12-14.",
+    "Proposed trades are top-ranked creamy picks (limited per profile for readability)."
+  ]
+}
