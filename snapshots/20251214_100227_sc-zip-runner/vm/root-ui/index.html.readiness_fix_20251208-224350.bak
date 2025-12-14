@@ -1,0 +1,1999 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>FounderConsole – Root Dashboard v3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg:#050816;
+      --sidebar:#020617;
+      --panel:#020617;
+      --card:#020617;
+      --border:#111827;
+      --accent:#3b82f6;
+      --accent-soft:#1d4ed8;
+      --fg:#e5e7eb;
+      --muted:#9ca3af;
+      --green:#22c55e;
+      --yellow:#fbbf24;
+      --red:#f97373;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #020617 100%);
+      color: var(--fg);
+      min-height: 100vh;
+    }
+    .shell{
+      display:flex;
+      min-height:100vh;
+    }
+    aside.sidebar{
+      width:320px;
+      background:var(--sidebar);
+      border-right:1px solid var(--border);
+      padding:14px 14px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:4px;
+    }
+    .brand-logo{
+      width:32px;height:32px;
+      border-radius:10px;
+      background:radial-gradient(circle at 30% 20%, #38bdf8, #1e3a8a);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:18px;
+    }
+    .brand-title{
+      font-size:16px;
+      font-weight:600;
+    }
+    .brand-sub{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .sidebar-section-title{
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .search-box{
+      background:#020617;
+      border-radius:999px;
+      border:1px solid var(--border);
+      padding:4px 8px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .search-box input{
+      background:transparent;
+      border:none;
+      outline:none;
+      flex:1;
+      color:var(--fg);
+      font-size:12px;
+    }
+    .tree{
+      flex:1;
+      overflow:auto;
+      padding-right:4px;
+      font-size:13px;
+    }
+    .tree ul{
+      list-style:none;
+      padding-left:14px;
+    }
+    .tree-node-label{
+      cursor:pointer;
+      padding:3px 6px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      color:var(--muted);
+    }
+    .tree-node-label.leaf{
+      padding-left:26px;
+    }
+    .tree-node-label:hover{
+      background:#0b1120;
+      color:var(--fg);
+    }
+    .tree-node-label.active{
+      background:rgba(59,130,246,0.18);
+      color:#f9fafb;
+      border:1px solid rgba(59,130,246,0.5);
+    }
+    .tree-node-toggle{
+      width:12px;
+      font-size:10px;
+      opacity:.7;
+    }
+    .node-code{
+      font-size:10px;
+      opacity:.7;
+      width:45px;
+    }
+    .node-text{
+      flex:1;
+    }
+    .footer-note{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    main.main{
+      flex:1;
+      padding:16px 20px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background:radial-gradient(circle at top left, #020617 0, #020617 60%, #020617 100%);
+    }
+    .main-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .main-kicker{
+      font-size:11px;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:2px;
+    }
+    .main-title{
+      font-size:20px;
+      font-weight:600;
+    }
+    .main-sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+    .env-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      font-size:11px;
+      background:#020617;
+    }
+    .env-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:var(--green);
+      box-shadow:0 0 0 4px rgba(34,197,94,0.15);
+    }
+
+    .layout-row{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:12px;
+      margin-top:4px;
+    }
+    .layout-row.single{
+      grid-template-columns:1fr;
+      margin-top:10px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:16px;
+      border:1px solid var(--border);
+      padding:12px 14px;
+      box-shadow:0 14px 30px rgba(15,23,42,0.45);
+    }
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:6px;
+      gap:10px;
+    }
+    .card-title{
+      font-size:14px;
+      font-weight:500;
+    }
+    .card-sub{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .pill{
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#020617;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      color:var(--muted);
+    }
+    .pill.green{border-color:rgba(34,197,94,.4);color:var(--green);}
+    .pill.yellow{border-color:rgba(234,179,8,.5);color:var(--yellow);}
+    .pill.red{border-color:rgba(248,113,113,.5);color:var(--red);}
+    .pill-dot{width:7px;height:7px;border-radius:999px;background:var(--border);}
+    .pill-dot.green{background:var(--green);}
+    .pill-dot.yellow{background:var(--yellow);}
+    .pill-dot.red{background:var(--red);}
+
+    .metric-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .metric{
+      padding:4px 8px;
+      border-radius:8px;
+      background:#020617;
+      border:1px solid var(--border);
+    }
+
+    .detail-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:6px;
+      gap:8px;
+    }
+    .detail-title{
+      font-size:14px;
+      font-weight:500;
+    }
+    .detail-path{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .detail-body{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    .detail-body strong{color:var(--fg);}
+    .detail-body code{
+      background:#020617;
+      border-radius:6px;
+      padding:1px 4px;
+      font-size:11px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      font-size:11px;
+    }
+    th,td{
+      border-bottom:1px solid var(--border);
+      padding:5px 6px;
+      text-align:left;
+      white-space:nowrap;
+    }
+    thead{
+      background:#020617;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+    tbody tr:hover{
+      background:rgba(15,23,42,0.8);
+    }
+    .text-right{text-align:right;}
+    .badge{
+      padding:1px 6px;
+      border-radius:999px;
+      font-size:10px;
+      border:1px solid var(--border);
+    }
+    .badge.BUY{color:var(--green);border-color:rgba(34,197,94,.5);}
+    .badge.SELL{color:var(--red);border-color:rgba(248,113,113,.5);}
+    .code-block{
+      background:#020617;
+      border-radius:8px;
+      border:1px solid var(--border);
+      padding:6px 8px;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas;
+      font-size:11px;
+      margin-top:6px;
+      max-height:160px;
+      overflow:auto;
+    }
+
+    .status-bar{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .status-bar span{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:8px;
+      margin-bottom:8px;
+      font-size:11px;
+    }
+    .toolbar input{
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+      flex:1;
+    }
+    .toolbar select{
+      padding:3px 6px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+    }
+    .field-details{
+      margin-top:8px;
+      padding-top:6px;
+      border-top:1px dashed var(--border);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .form-grid{
+      display:grid;
+      grid-template-columns:220px 1fr;
+      gap:6px 12px;
+      margin-top:8px;
+      font-size:12px;
+    }
+    .form-grid label{
+      text-align:right;
+      color:var(--muted);
+      padding-top:3px;
+    }
+    .form-grid input[type="text"],
+    .form-grid input[type="number"]{
+      width:100%;
+      padding:4px 8px;
+      border-radius:8px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+    }
+    .form-grid input[type="checkbox"]{
+      transform:scale(0.9);
+    }
+    .form-note{
+      margin-top:8px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .btn{
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+      font-size:11px;
+      cursor:pointer;
+    }
+    .btn-primary{
+      border-color:rgba(59,130,246,.7);
+    }
+
+    
+    /* === Readiness Dashboard – Excel-style grid helpers =================== */
+    .tech-header{
+      margin-top:6px;
+      margin-bottom:6px;
+      font-size:11px;
+      line-height:1.5;
+    }
+    .tech-header-title{
+      font-size:13px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .tech-header-line{
+      color:var(--muted);
+    }
+    .tech-meta-grid{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:4px 12px;
+      margin:8px 0;
+      font-size:11px;
+    }
+    .tech-meta-label{
+      color:var(--muted);
+    }
+    .tech-meta-value{
+      color:var(--fg);
+      font-weight:500;
+    }
+    .tech-note{
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .readiness-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:center;
+      margin:8px 0;
+      font-size:11px;
+    }
+    .readiness-controls input,
+    .readiness-controls select{
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+      font-size:11px;
+    }
+    .readiness-controls .btn{
+      font-size:11px;
+    }
+
+    .readiness-table{
+      font-size:11px;
+    }
+    .readiness-table thead tr:nth-child(1) th{
+      background:#020617;
+      border-bottom:1px solid #1f2937;
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      cursor:pointer;
+    }
+    .readiness-table thead tr:nth-child(2) th{
+      background:#020617;
+      border-bottom:1px solid #0f172a;
+      padding-top:2px;
+      padding-bottom:4px;
+    }
+    .readiness-filter-input{
+      width:100%;
+      padding:2px 4px;
+      border-radius:6px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+      font-size:10px;
+    }
+    .readiness-filter-select{
+      width:100%;
+      padding:2px 4px;
+      border-radius:6px;
+      border:1px solid var(--border);
+      background:#020617;
+      color:var(--fg);
+      font-size:10px;
+    }
+    .readiness-rowcount{
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+
+    @media (max-width:960px){
+      .shell{flex-direction:column;}
+      aside.sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);flex:none;}
+      main.main{padding:12px;}
+      .layout-row{grid-template-columns:1fr;}
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+      .form-grid label{
+        text-align:left;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">K</div>
+      <div>
+        <div class="brand-title">KenTechIT – FounderConsole</div>
+        <div class="brand-sub">Root SAP-style tree • v3</div>
+      </div>
+    </div>
+
+    <div class="search-box">
+      🔍
+      <input id="treeSearch" placeholder="Filter by code / label…"/>
+    </div>
+
+    <div class="sidebar-section-title">Navigation Tree (Root)</div>
+    <div id="treeRoot" class="tree"></div>
+
+    <div class="footer-note">
+      Pick a node on the left; the AI panel on the right explains / shows live data.
+      For AI Wealth SIM we already wire Control Run JSON, creamy layer table &amp; Data &amp; Universe tables.
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="main-header">
+      <div>
+        <div class="main-kicker">FOUNDERCONSOLE – ROOT DASHBOARD V2</div>
+        <div class="main-title">AI Wealth &amp; Supercoder – Control &amp; Governance View</div>
+        <div class="main-sub">
+          Central control panel for AI Wealth, ERP AI Intelligence, Price Engine, Pricing Genie, Digital Marketing, Personal Website &amp; Supercoder.
+        </div>
+      </div>
+      <div>
+        <div class="env-pill">
+          <div class="env-dot"></div>
+          <span id="envLabel">ENV: SIM • Oracle Cloud</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="layout-row">
+      <div class="card" id="card-aiw">
+        <div class="card-header">
+          <div>
+            <div class="card-title">AI Wealth – Control Run (SIM)</div>
+            <div class="card-sub">Creamy layer summary &amp; proposed trades</div>
+          </div>
+          <button id="btnRefreshAIW" class="btn btn-primary">⟳ Refresh</button>
+        </div>
+        <div id="aiwSummary" class="metric-row">
+          <span class="metric">Waiting for data…</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Go-Live Readiness &amp; Security</div>
+            <div class="card-sub">Readiness board + security score snapshot</div>
+          </div>
+          <button id="btnRefreshHealth" class="btn">⟳ Refresh</button>
+        </div>
+        <div class="metric-row" id="readinessSummary">
+          <span class="metric">Waiting for go_live_readiness.json…</span>
+        </div>
+        <div class="status-bar" id="securitySummary">
+          <span>Security:
+            <span class="pill">
+              <span class="pill-dot"></span>
+              <span id="securityScoreLabel">pending</span>
+            </span>
+          </span>
+          <span id="readinessStatusLabel"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout-row single">
+      <div class="card">
+        <div class="detail-header">
+          <div>
+            <div class="detail-title" id="detailTitle">Welcome to FounderConsole Root Dashboard v3</div>
+            <div class="detail-path" id="detailPath">Select any node on the left tree.</div>
+          </div>
+          <span class="pill" id="detailMeta">Context: Root</span>
+        </div>
+        <div class="detail-body" id="detailBody">
+          This is the frozen Root UI for all KenTechIT projects. On the left you have a SAP-style tree; on the right you have an AI detail panel.
+          <br/><br/>
+          For AI Wealth (SIM) we have already wired:
+          <ul style="margin-top:4px;padding-left:18px;">
+            <li><strong>2.1.1.1 – Control Run – SIM Report</strong> → <code>/api/aiwealth/validation</code> + <code>/api/aiwealth/validation/table</code></li>
+            <li><strong>2.1.1.3 – Data &amp; Universe</strong> → <code>/api/aiwealth/data-universe/table/&lt;TABLE&gt;</code></li>
+            <li><strong>8.1 – Go-Live Readiness Board</strong> → <code>/api/readiness/readiness</code></li>
+            <li><strong>6.1 – Security Score Dashboard</strong> → <code>/api/security/report</code></li>
+            <li><strong>2.1.1.9.1.x – AIW Settings (DEV)</strong> → browser-save Phase 1 using a common settings module.</li>
+          </ul>
+        </div>
+        <div id="detailTableContainer"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // ========== DATA & UNIVERSE CONFIG (function-module style) ==================
+  const UNIVERSE_CATEGORIES = {
+    customization: {
+      label: "Customization / Configuration",
+      tables: [
+        { key: "AIW_C_ENVIRONMENT", name: "Environment Config", description: "SIM / PROD definitions and high-level switches." },
+        { key: "AIW_C_PROFILE", name: "Profiles", description: "Risk profiles per environment." },
+        { key: "AIW_C_RISK_CATEGORY", name: "Risk Categories", description: "Risk category master (LOW/MEDIUM/HIGH/etc.)." },
+        { key: "AIW_C_STRATEGY", name: "Strategies", description: "High-level AI Wealth strategies." },
+        { key: "AIW_C_STRATEGY_PARAM", name: "Strategy Parameters", description: "Key/value parameters per strategy & environment." },
+        { key: "AIW_C_STRATEGY_PROFILE", name: "Strategy–Profile Mapping", description: "Which strategies are enabled for which profiles." },
+        { key: "AIW_C_STRATEGY_SCOPE", name: "Strategy Scope", description: "Instrument types, sectors and caps per strategy." },
+        { key: "AIW_C_CREAMY_LAYER", name: "Creamy Layer Size", description: "Min/default/max creamy layer sizes per profile/env." },
+        { key: "AIW_C_PROFILE_APPROVAL_RULES", name: "Profile Approval Rules", description: "Auto-approval thresholds per profile." },
+        { key: "AIW_C_BROKER", name: "Broker Config", description: "Broker capabilities per environment." },
+        { key: "AIW_C_BROKER_ROUTING", name: "Broker Routing", description: "Routing rules by profile / risk / instrument." },
+        { key: "AIW_C_USER_PROFILE_MAP", name: "User Profile Map", description: "Mapping of FounderConsole users to AI Wealth profiles." },
+        { key: "AIW_C_HOLIDAY_CALENDAR", name: "Holiday Calendar", description: "Trading holidays per exchange." },
+        { key: "AIW_C_SCHEDULER", name: "Scheduler Windows", description: "Allowed run windows per env/tenant." },
+        { key: "AIW_C_TENANT", name: "Tenant Master", description: "AI Wealth tenants with license linkage." },
+        { key: "AIW_C_TENANT_PROFILE_ENV", name: "Tenant Profile–Env Mapping", description: "Which profiles/env each tenant can use." }
+      ]
+    },
+    master: {
+      label: "Master Data",
+      tables: [
+        { key: "AIW_M_INSTRUMENT", name: "Instrument Master", description: "Universe of tradable instruments with metadata." }
+      ]
+    },
+    transaction: {
+      label: "Transaction & Market Data",
+      tables: [
+        { key: "aiw_universe_broker_prices", name: "Universe – Broker Prices", description: "Universe snapshot per symbol/exchange/broker." },
+        { key: "aiw_broker_prices_live", name: "Live Broker Prices", description: "Live price cache from brokers." },
+        { key: "AIW_T_SIGNAL", name: "Signals", description: "Signals per env/run/profile/instrument." },
+        { key: "AIW_A_CREAMY_LAYER", name: "Creamy Layer", description: "Final shortlisted instruments per run." },
+        { key: "AIW_T_APPROVAL", name: "Approvals (Current)", description: "Current approval state for proposed trades." },
+        { key: "AIW_T_RUN", name: "Run Summary", description: "Run-level summary metrics." },
+        { key: "AIW_T_EXECUTION", name: "Executions", description: "Executed broker orders." },
+        { key: "AIW_T_EXECUTION_DIFF", name: "Execution vs Proposal", description: "Slippage/diff between proposal and executed." }
+      ]
+    },
+    history: {
+      label: "History & Analytics",
+      tables: [
+        { key: "AIW_H_PRICE_EOD", name: "EOD Price History", description: "Daily OHLCV price history." },
+        { key: "AIW_A_APPROVAL_HISTORY", name: "Approval History", description: "History of approval decisions." },
+        { key: "AIW_T_VALIDATION_SNAPSHOT", name: "Validation Snapshots", description: "Stored validation snapshots per run." },
+        { key: "AIW_T_USAGE_METRICS", name: "Usage Metrics", description: "Per-tenant usage metrics for billing." },
+        { key: "AIW_A_AUDIT_LOG", name: "Audit Log", description: "System audit trail of key actions & changes." }
+      ]
+    }
+  };
+
+  function buildUniverseTreeNodes() {
+    const baseCode = "2.1.1.3";
+    const result = [];
+    const order = ["customization","master","transaction","history"];
+    let catIndex = 1;
+    for (const id of order) {
+      const cat = UNIVERSE_CATEGORIES[id];
+      if (!cat) continue;
+      const catCode = baseCode + "." + catIndex;
+      const children = [];
+      let tIndex = 1;
+      for (const tbl of cat.tables) {
+        children.push({
+          code: catCode + "." + tIndex,
+          label: tbl.key + " – " + tbl.name,
+          key: "universe.table." + tbl.key,
+          universeCategory: id
+        });
+        tIndex += 1;
+      }
+      result.push({
+        code: catCode,
+        label: cat.label,
+        key: "universe.category." + id,
+        children
+      });
+      catIndex += 1;
+    }
+    return result;
+  }
+
+  // ========== TREE DATA ======================================================
+    const treeData = [
+    {
+      code: "1",
+      label: "FOUNDER CONSOLE (GLOBAL)",
+      key: "global",
+      children: [
+        { code: "1.1", label: "Program Charter & AI Constitution", key: "global.charter" },
+        { code: "1.2", label: "Global Status – Supercoder + AI Wealth", key: "global.status" },
+        { code: "1.3", label: "Founder Home Dashboard", key: "global.homeDashboard" },
+        { code: "1.4", label: "Green / Yellow / Red Status Board", key: "global.gyrBoard" },
+        { code: "1.5", label: "Today’s AI Suggestions (All Projects)", key: "global.aiSuggestions" },
+        {
+          code: "1.6",
+          label: "Quick Links (All Projects)",
+          key: "global.quickLinks",
+          children: [
+            { code: "1.6.1", label: "AI Wealth – Control Run", key: "quick.aiw.controlRun" },
+            { code: "1.6.2", label: "ERP AI Intelligence – Insight Bot", key: "quick.erp.insightBot" },
+            { code: "1.6.3", label: "Price Engine – Price Optimizer", key: "quick.priceEngine" },
+            { code: "1.6.4", label: "Pricing Genie – Comparison View", key: "quick.pricingGenie" },
+            { code: "1.6.5", label: "Digital Marketing Automation", key: "quick.marketing" },
+            { code: "1.6.6", label: "Personal Website & Branding", key: "quick.website" },
+            { code: "1.6.7", label: "Supercoder & Infrastructure", key: "quick.supercoder" }
+          ]
+        }
+      ]
+    },
+    {
+      code: "2",
+      label: "AI WEALTH (SIM / DEV)",
+      key: "aiw",
+      children: [
+        { code: "2.1", label: "AI Wealth – Dev View", key: "aiw.dev.view" },
+        {
+          code: "2.1.1",
+          label: "AI Wealth – DEV (Project)",
+          key: "aiw.dev.project",
+          children: [
+            { code: "2.1.1.1", label: "Control Run – SIM Report", key: "aiw.dev.controlRunSim" },
+            { code: "2.1.1.2", label: "Readiness Dashboard", key: "aiw.dev.readiness" },
+            {
+              code: "2.1.1.3",
+              label: "Data & Universe",
+              onClick: () => {
+              AiwDataUniverse.showOverview();
+              },
+              key: "aiw.dev.universe",
+              children: buildUniverseTreeNodes()
+            },
+            { code: "2.1.1.4", label: "Simulation & Backtests", key: "aiw.dev.backtests" },
+            { code: "2.1.1.5", label: "Tests & Quality", key: "aiw.dev.tests" },
+            { code: "2.1.1.6", label: "Dev Logs & Self-Heal", key: "aiw.dev.logs" },
+            { code: "2.1.1.7", label: "Dev ROI & Cost", key: "aiw.dev.roi" },
+            { code: "2.1.1.8", label: "AI Brain – Dev", key: "aiw.dev.brain" },
+            {
+              code: "2.1.1.9",
+              label: "AIW Settings (DEV)",
+              key: "aiw.settings",
+              children: [
+                {
+                  code: "2.1.1.9.1",
+                  label: "AIW Settings – Master",
+                  key: "aiw.settings.master",
+                  children: [
+                    { code: "2.1.1.9.1.1", label: "AIW Founder Settings", key: "aiw.settings.founder" },
+                    { code: "2.1.1.9.1.2", label: "AIW User Settings", key: "aiw.settings.user" },
+                    { code: "2.1.1.9.1.3", label: "AIW Broker API Capabilities", key: "aiw.settings.broker" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      code: "3",
+      label: "Licensing & Billing Hub",
+      key: "licensing",
+      children: [
+        { code: "3.1", label: "License Plans & Pricing", key: "licensing.plans" },
+        { code: "3.2", label: "Per-Project License Console", key: "licensing.perProject" },
+        { code: "3.3", label: "Razorpay Integration & Cash Collected", key: "licensing.razorpay" },
+        { code: "3.4", label: "Auto-Downgrade / Inactivity Rules", key: "licensing.downgrade" },
+        { code: "3.5", label: "Device Binding & QR Licenses", key: "licensing.deviceBinding" },
+        { code: "3.6", label: "AI License Recommendations & ROI Predictor", key: "licensing.aiRecommendations" }
+      ]
+    },
+    {
+      code: "4",
+      label: "Pain Points & Monetization Board",
+      key: "pain",
+      children: [
+        { code: "4.1", label: "Global Pain Point Backlog", key: "pain.global" },
+        { code: "4.2", label: "Per-Project Pain Points", key: "pain.perProject" },
+        { code: "4.3", label: "Monetization Ideas & Sequences", key: "pain.monetization" },
+        { code: "4.4", label: "ROI & Cost Projection per Idea", key: "pain.roi" },
+        { code: "4.5", label: "Approval Queue (WhatsApp / Email)", key: "pain.approval" },
+        { code: "4.6", label: "AI Recommendations per Pain Point", key: "pain.aiRecommendations" }
+      ]
+    },
+    {
+      code: "5",
+      label: "Supercoder & Infrastructure",
+      key: "supercoder",
+      children: [
+        { code: "5.1", label: "ZIP Watcher & Deployments", key: "supercoder.zipWatcher" },
+        { code: "5.2", label: "Environments & Hosts", key: "supercoder.envs" },
+        { code: "5.3", label: "NPM / SSL / DNS Status", key: "supercoder.npm" },
+        { code: "5.4", label: "Logs & Observability (Loki / Grafana)", key: "supercoder.logs" },
+        { code: "5.5", label: "Self-Heal & Self-Upgrade Timers", key: "supercoder.selfHeal" },
+        { code: "5.6", label: "Reserved IP / WAF / Security Infra", key: "supercoder.securityInfra" }
+      ]
+    },
+    {
+      code: "6",
+      label: "Security & Compliance",
+      key: "security",
+      children: [
+        { code: "6.1", label: "Security Score Dashboard", key: "security.score" },
+        { code: "6.2", label: "Per-Project Security Checks", key: "security.perProject" },
+        { code: "6.3", label: "Audit Trail Viewer", key: "security.audit" },
+        { code: "6.4", label: "Data Privacy & Compliance (GDPR / ISO / SOC2)", key: "security.compliance" },
+        { code: "6.5", label: "User & Role Management", key: "security.users" },
+        { code: "6.6", label: "MFA / IP Allowlist / NPM Admin Controls", key: "security.mfa" }
+      ]
+    },
+    {
+      code: "7",
+      label: "AI Constitution & Brain",
+      key: "aiConstitution",
+      children: [
+        { code: "7.1", label: "AI Constitution (Rules & Guardrails)", key: "aiConstitution.rules" },
+        { code: "7.2", label: "Beyond Benchmark Score (BB Score)", key: "aiConstitution.bbScore" },
+        { code: "7.3", label: "Global Share & Competitive Benchmarking", key: "aiConstitution.globalShare" },
+        { code: "7.4", label: "Cross-Project Intelligence Hub", key: "aiConstitution.crossProject" },
+        { code: "7.5", label: "RAG / Knowledge Sources per Project", key: "aiConstitution.rag" }
+      ]
+    },
+    {
+      code: "8",
+      label: "Readiness & Testing",
+      key: "readiness",
+      children: [
+        { code: "8.1", label: "Go-Live Readiness Board", key: "readiness.board" },
+        { code: "8.2", label: "Per-Project Readiness Detail", key: "readiness.perProject" },
+        { code: "8.3", label: "Test Cases & Coverage (10,000+)", key: "readiness.tests" },
+        { code: "8.4", label: "Benchmark vs Competitors", key: "readiness.benchmark" },
+        { code: "8.5", label: "Pending Items to Reach 10/10", key: "readiness.pending" }
+      ]
+    },
+    {
+      code: "9",
+      label: "Notifications & Channels",
+      key: "notifications",
+      children: [
+        { code: "9.1", label: "Email & WhatsApp Configuration", key: "notifications.config" },
+        { code: "9.2", label: "Alert Rules", key: "notifications.rules" },
+        { code: "9.3", label: "Notification History", key: "notifications.history" },
+        { code: "9.4", label: "Daily AI Summary / Digest Settings", key: "notifications.digest" }
+      ]
+    },
+    {
+      code: "10",
+      label: "Global Settings",
+      key: "settings",
+      children: [
+        { code: "10.1", label: "Branding (KenTechIT Logo & Themes)", key: "settings.branding" },
+        { code: "10.2", label: "Timezones & Market Calendars", key: "settings.timezones" },
+        { code: "10.3", label: "Broker / API Keys Overview", key: "settings.brokers" },
+        { code: "10.4", label: "LLM / Model Routing Settings", key: "settings.llmRouting" },
+        { code: "10.5", label: "Backup & Export", key: "settings.backup" }
+      ]
+    },
+    {
+      code: "11",
+      label: "Projects – All Products",
+      key: "projects.all",
+      children: [
+        { code: "11.1", label: "AI Wealth Generator", key: "projects.aiw" },
+        { code: "11.2", label: "ERP AI Intelligence", key: "projects.erp" },
+        { code: "11.3", label: "Price Engine", key: "projects.priceEngine" },
+        { code: "11.4", label: "Pricing Genie", key: "projects.pricingGenie" },
+        { code: "11.5", label: "Digital Marketing Automation", key: "projects.marketing" },
+        { code: "11.6", label: "Personal Website & Branding", key: "projects.website" },
+        { code: "11.7", label: "Supercoder & Infrastructure", key: "projects.supercoder" }
+      ]
+    },
+    {
+      code: "12",
+      label: "AI Wealth – Core Business Brain (SIM Control Run)",
+      key: "aiw.dev.coreBusiness",
+    },
+ 
+];
+
+  // ========== DOM REFERENCES ================================================
+  const treeRootEl = document.getElementById("treeRoot");
+  const detailTitleEl = document.getElementById("detailTitle");
+  const detailPathEl = document.getElementById("detailPath");
+  const detailBodyEl = document.getElementById("detailBody");
+  const detailMetaEl = document.getElementById("detailMeta");
+  const detailTableContainer = document.getElementById("detailTableContainer");
+
+  let activeNodeKey = null;
+  let aiwDetailRowsAll = [];
+
+  // ========== TREE RENDERING =================================================
+  function renderTree(nodes, container, level=0) {
+    const ul = document.createElement("ul");
+    if (level === 0) ul.style.paddingLeft = "0";
+    for (const node of nodes) {
+      const li = document.createElement("li");
+      const hasChildren = Array.isArray(node.children) && node.children.length > 0;
+
+      const label = document.createElement("div");
+      label.className = "tree-node-label" + (hasChildren ? "" : " leaf");
+      label.dataset.key = node.key;
+      label.dataset.code = node.code;
+      label.dataset.label = node.label;
+
+      const toggle = document.createElement("span");
+      toggle.className = "tree-node-toggle";
+      toggle.textContent = hasChildren ? "▸" : "";
+      label.appendChild(toggle);
+
+      const codeSpan = document.createElement("span");
+      codeSpan.className = "node-code";
+      codeSpan.textContent = node.code;
+      label.appendChild(codeSpan);
+
+      const textSpan = document.createElement("span");
+      textSpan.className = "node-text";
+      textSpan.textContent = node.label;
+      label.appendChild(textSpan);
+
+      label.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        if (hasChildren) {
+          const expanded = li.classList.toggle("expanded");
+          toggle.textContent = expanded ? "▾" : "▸";
+          if (childUl) childUl.style.display = expanded ? "block" : "none";
+        }
+        selectNode(node);
+      });
+
+      li.appendChild(label);
+
+      let childUl = null;
+      if (hasChildren) {
+        childUl = renderTree(node.children, li, level+1);
+        childUl.style.display = "none";
+      }
+
+      ul.appendChild(li);
+    }
+    container.appendChild(ul);
+    return ul;
+  }
+
+  function clearActiveLabels() {
+    document.querySelectorAll(".tree-node-label.active")
+      .forEach(el => el.classList.remove("active"));
+  }
+
+  // ========== API HELPERS ====================================================
+  async function fetchJson(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("HTTP " + res.status + " for " + url);
+    return res.json();
+  }
+
+  // ========== AI WEALTH SUMMARY CARD ========================================
+  async function loadAiWealthSummary() {
+    try {
+      const [vRaw, tRaw] = await Promise.all([
+        fetchJson("/api/aiwealth/validation"),
+        fetchJson("/api/aiwealth/validation/table")
+      ]);
+
+      const s = vRaw.summary || {};
+      const meta = tRaw.meta || {};
+      const rows = tRaw.rows || [];
+
+      const el = document.getElementById("aiwSummary");
+      el.innerHTML = "";
+
+      const m1 = document.createElement("span");
+      m1.className = "metric";
+      m1.textContent = "Run date: " + (meta.run_date || s.run_date || "–") +
+        " • ENV: " + (meta.env || s.env || "–");
+      el.appendChild(m1);
+
+      const m2 = document.createElement("span");
+      m2.className = "metric";
+      m2.textContent = "Universe: " + (meta.total_universe || s.total_universe || 0) +
+        " • Candidates: " + (meta.total_candidates || s.total_candidates || 0);
+      el.appendChild(m2);
+
+      const m3 = document.createElement("span");
+      m3.className = "metric";
+      m3.textContent = "Creamy layer: " + (meta.creamy_layer_count || s.creamy_layer_count || 0);
+      el.appendChild(m3);
+
+      const m4 = document.createElement("span");
+      m4.className = "metric";
+      const profiles = meta.profiles || s.profiles || [];
+      m4.textContent = "Profiles: " + (profiles.join(", ") || "–");
+      el.appendChild(m4);
+
+      const m5 = document.createElement("span");
+      m5.className = "metric";
+      m5.textContent = "Manual approvals in table: " + rows.length;
+      el.appendChild(m5);
+    } catch (e) {
+      const el = document.getElementById("aiwSummary");
+      el.innerHTML = "<span class='metric'>AI Wealth summary failed: " + e.message + "</span>";
+    }
+  }
+
+  // ========== READINESS & SECURITY SUMMARY ==================================
+  async function loadReadinessSummary() {
+    try {
+      const data = await fetchJson("/api/readiness/readiness");
+      const el = document.getElementById("readinessSummary");
+      el.innerHTML = "";
+      const sum = data.summary || data || {};
+      const m1 = document.createElement("span");
+      m1.className = "metric";
+      m1.textContent = "Overall: " + (sum.overall_status || sum.status || "unknown");
+      el.appendChild(m1);
+
+      if (sum.projects_total != null) {
+        const m2 = document.createElement("span");
+        m2.className = "metric";
+        m2.textContent = "Projects: " +
+          (sum.projects_green || 0) + " green / " +
+          (sum.projects_yellow || 0) + " yellow / " +
+          (sum.projects_red || 0) + " red (of " + sum.projects_total + ")";
+        el.appendChild(m2);
+      }
+
+      const label = document.getElementById("readinessStatusLabel");
+      label.textContent = "Readiness: " + (sum.overall_label || sum.overall_status || "n/a");
+    } catch (e) {
+      document.getElementById("readinessSummary").innerHTML =
+        "<span class='metric'>Readiness fetch failed: " + e.message + "</span>";
+    }
+  }
+
+  async function loadSecuritySummary() {
+    try {
+      const data = await fetchJson("/api/security/report");
+      const label = document.getElementById("securityScoreLabel");
+      const overall = data.overall_score ?? data.score ?? data.status ?? "unknown";
+      label.textContent = overall;
+      const pillDot = document.querySelector("#securitySummary .pill-dot");
+      if (typeof overall === "number") {
+        if (overall >= 80) pillDot.className = "pill-dot green";
+        else if (overall >= 50) pillDot.className = "pill-dot yellow";
+        else pillDot.className = "pill-dot red";
+      }
+    } catch (e) {
+      document.getElementById("securityScoreLabel").textContent = "error";
+    }
+  }
+
+  // ========== AI WEALTH DETAIL TABLE ========================================
+  function formatPercent(v) {
+    if (v === null || v === undefined || v === "") return "";
+    const num = Number(v);
+    if (!isFinite(num)) return "";
+    return num.toFixed(2) + " %";
+  }
+
+  function renderAiWealthDetailTable() {
+    if (!Array.isArray(aiwDetailRowsAll)) aiwDetailRowsAll = [];
+
+    const filterInput = document.getElementById("aiwFilterText");
+    const manualCheckbox = document.getElementById("aiwFilterManual");
+    const sortSelect = document.getElementById("aiwSortBy");
+
+    const filterText = (filterInput?.value || "").toLowerCase();
+    const onlyManual = manualCheckbox ? manualCheckbox.checked : true;
+    const sortBy = sortSelect ? sortSelect.value : "exp";
+
+    let rows = aiwDetailRowsAll.slice();
+
+    if (onlyManual) {
+      rows = rows.filter(r => r.show_for_manual_approval !== false);
+    }
+
+    if (filterText) {
+      rows = rows.filter(r => {
+        const sym = (r.symbol || "").toLowerCase();
+        const prof = (r.profile || "").toLowerCase();
+        const br = (r.broker || "").toLowerCase();
+        return sym.includes(filterText) || prof.includes(filterText) || br.includes(filterText);
+      });
+    }
+
+    const riskOrder = {
+      "ULTRA_AGGRESSIVE": 4,
+      "AGGRESSIVE": 3,
+      "BALANCED": 2,
+      "CONSERVATIVE": 1
+    };
+
+    rows.sort((a, b) => {
+      if (sortBy === "risk") {
+        const ra = riskOrder[a.risk_bucket || ""] || 0;
+        const rb = riskOrder[b.risk_bucket || ""] || 0;
+        if (ra !== rb) return rb - ra;
+      } else if (sortBy === "symbol") {
+        const sa = (a.symbol || "").localeCompare(b.symbol || "");
+        if (sa !== 0) return sa;
+      }
+      const ea = Number(a.expected_return_pct || -1e9);
+      const eb = Number(b.expected_return_pct || -1e9);
+      if (eb !== ea) return eb - ea;
+      return (a.symbol || "").localeCompare(b.symbol || "");
+    });
+
+    const tbl = document.createElement("table");
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr>"
+      + "<th>Symbol</th>"
+      + "<th>Segment</th>"
+      + "<th>Exch</th>"
+      + "<th>Profile</th>"
+      + "<th>Dir</th>"
+      + "<th class='text-right'>Qty</th>"
+      + "<th class='text-right'>Entry</th>"
+      + "<th class='text-right'>Target</th>"
+      + "<th class='text-right'>SL</th>"
+      + "<th class='text-right'>Exp %</th>"
+      + "<th class='text-right'>Conf</th>"
+      + "<th>Risk bucket</th>"
+      + "<th class='text-right'>R:R</th>"
+      + "<th>Broker</th>"
+      + "<th>AI rec</th>"
+      + "<th>Reason</th>"
+      + "<th>Action</th>"
+      + "</tr>";
+    tbl.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      const dir = r.direction || "";
+      const badgeClass = dir ? ("badge " + dir) : "badge";
+
+      tr.innerHTML =
+        "<td>" + (r.symbol || "") + "</td>" +
+        "<td>" + (r.segment || "") + "</td>" +
+        "<td>" + (r.exchange || "") + "</td>" +
+        "<td>" + (r.profile || "") + "</td>" +
+        "<td><span class='" + badgeClass + "'>" + dir + "</span></td>" +
+        "<td class='text-right'>" + (r.quantity ?? "") + "</td>" +
+        "<td class='text-right'>" + (r.entry_price ?? "") + "</td>" +
+        "<td class='text-right'>" + (r.target_price ?? "") + "</td>" +
+        "<td class='text-right'>" + (r.stop_loss ?? "") + "</td>" +
+        "<td class='text-right'>" + formatPercent(r.expected_return_pct) + "</td>" +
+        "<td class='text-right'>" + (r.confidence ?? "") + "</td>" +
+        "<td>" + (r.risk_bucket || "") + "</td>" +
+        "<td class='text-right'>" + (r.risk_reward_ratio ?? "") + "</td>" +
+        "<td>" + (r.broker || "") + "</td>" +
+        "<td>" + (r.ai_recommendation || "") + "</td>" +
+        "<td>" + (r.ai_reason || "") + "</td>" +
+        "<td>"
+          + "<button class='btn' style='font-size:10px;margin-right:4px;border-color:#22c55e;color:#bbf7d0;'>Approve</button>"
+          + "<button class='btn' style='font-size:10px;margin-right:4px;border-color:#eab308;color:#facc15;'>Hold</button>"
+          + "<button class='btn' style='font-size:10px;border-color:#f97373;color:#fecaca;'>Reject</button>"
+        + "</td>";
+
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody);
+
+    detailTableContainer.innerHTML = "";
+    detailTableContainer.appendChild(tbl);
+  }
+
+  async function loadAiWealthIntoDetail() {
+    detailBodyEl.innerHTML = "Loading AI Wealth validation + creamy layer table…";
+    detailTableContainer.innerHTML = "";
+    try {
+      const [vRaw, tRaw] = await Promise.all([
+        fetchJson("/api/aiwealth/validation"),
+        fetchJson("/api/aiwealth/validation/table")
+      ]);
+      const s = vRaw.summary || {};
+      const meta = tRaw.meta || {};
+      aiwDetailRowsAll = tRaw.rows || [];
+
+      let html = "";
+      html += "<p><strong>Run date:</strong> " + (meta.run_date || s.run_date || "–") +
+              " | <strong>ENV:</strong> " + (meta.env || s.env || "–") + "</p>";
+      html += "<p style='margin-top:4px;'><strong>Universe:</strong> " + (meta.total_universe || s.total_universe || 0) +
+              " • <strong>Candidates:</strong> " + (meta.total_candidates || s.total_candidates || 0) +
+              " • <strong>Creamy layer:</strong> " + (meta.creamy_layer_count || s.creamy_layer_count || 0) + "</p>";
+      html += "<p style='margin-top:4px;'><strong>Profiles:</strong> " +
+              (((meta.profiles || s.profiles || []).join(', ')) || "–") + "</p>";
+      html += "<p style='margin-top:4px;'><strong>Manual approvals in table:</strong> " +
+              aiwDetailRowsAll.length + "</p>";
+      detailBodyEl.innerHTML = html;
+
+      const toolbar = document.createElement("div");
+      toolbar.className = "toolbar";
+
+      const input = document.createElement("input");
+      input.id = "aiwFilterText";
+      input.placeholder = "Filter by symbol / profile / broker…";
+      input.addEventListener("input", renderAiWealthDetailTable);
+      toolbar.appendChild(input);
+
+      const labelManual = document.createElement("label");
+      labelManual.style.display = "inline-flex";
+      labelManual.style.alignItems = "center";
+      labelManual.style.gap = "4px";
+      const chk = document.createElement("input");
+      chk.type = "checkbox";
+      chk.id = "aiwFilterManual";
+      chk.checked = true;
+      chk.addEventListener("change", renderAiWealthDetailTable);
+      labelManual.appendChild(chk);
+      const spanManual = document.createElement("span");
+      spanManual.textContent = "Only manual approvals";
+      labelManual.appendChild(spanManual);
+      toolbar.appendChild(labelManual);
+
+      const sortLabel = document.createElement("span");
+      sortLabel.textContent = "Sort by:";
+      toolbar.appendChild(sortLabel);
+
+      const sortSel = document.createElement("select");
+      sortSel.id = "aiwSortBy";
+      sortSel.innerHTML =
+        "<option value='exp'>Exp % (desc)</option>" +
+        "<option value='risk'>Risk bucket</option>" +
+        "<option value='symbol'>Symbol</option>";
+      sortSel.addEventListener("change", renderAiWealthDetailTable);
+      toolbar.appendChild(sortSel);
+
+      detailTableContainer.innerHTML = "";
+      detailTableContainer.appendChild(toolbar);
+
+      renderAiWealthDetailTable();
+    } catch (e) {
+      detailBodyEl.innerHTML = "<span style='color:var(--red);'>Error loading AI Wealth data: " + e.message + "</span>";
+      detailTableContainer.innerHTML = "";
+    }
+  }
+
+  // ========== DATA & UNIVERSE DETAIL ========================================
+  function showUniverseCategory(catId) {
+    const cat = UNIVERSE_CATEGORIES[catId];
+    if (!cat) {
+      detailBodyEl.innerHTML = "Unknown Data &amp; Universe category: " + catId;
+      detailTableContainer.innerHTML = "";
+      return;
+    }
+    let html = "";
+    html += "<p><strong>AI Wealth – Data &amp; Universe (" + cat.label + ")</strong></p>";
+    html += "<p>Select a table on the left to see live data from <code>aiw.db</code>.</p>";
+    html += "<br/><strong>" + cat.label.toUpperCase() + "</strong><ul style='margin-top:4px;padding-left:18px;'>";
+    for (const tbl of cat.tables) {
+      html += "<li><strong>" + tbl.key + "</strong> – " + tbl.name + "</li>";
+    }
+    html += "</ul>";
+    detailBodyEl.innerHTML = html;
+
+    const info = document.createElement("div");
+    info.className = "field-details";
+    info.innerHTML = "Field-level descriptions for each table will appear when you open the specific table node.";
+    detailTableContainer.innerHTML = "";
+    detailTableContainer.appendChild(info);
+  }
+
+  async function loadUniverseTable(tableKey) {
+    detailBodyEl.innerHTML = "Loading Data &amp; Universe table <strong>" + tableKey + "</strong>…";
+    detailTableContainer.innerHTML = "";
+    try {
+      const url = "/api/aiwealth/data-universe/table/" + encodeURIComponent(tableKey) + "?limit=200";
+      const data = await fetchJson(url);
+      const rows = data.rows || [];
+      const description = data.description || "";
+
+      let html = "";
+      html += "<p><strong>Table:</strong> " + tableKey + " &nbsp; | &nbsp; ";
+      html += "<strong>Rows:</strong> " + rows.length + "</p>";
+      if (description) {
+        html += "<p style='margin-top:4px;'>" + description + "</p>";
+      }
+      detailBodyEl.innerHTML = html;
+
+      const toolbar = document.createElement("div");
+      toolbar.className = "toolbar";
+
+      const filterInput = document.createElement("input");
+      filterInput.placeholder = "Filter rows (e.g. symbol, ENV_CODE, profile)…";
+      toolbar.appendChild(filterInput);
+
+      const limitInfo = document.createElement("span");
+      limitInfo.textContent = "Showing up to 200 rows";
+      toolbar.appendChild(limitInfo);
+
+      const fieldBtn = document.createElement("button");
+      fieldBtn.textContent = "Field details";
+      fieldBtn.className = "btn";
+      toolbar.appendChild(fieldBtn);
+
+      detailTableContainer.innerHTML = "";
+      detailTableContainer.appendChild(toolbar);
+
+      if (!rows.length) {
+        const msg = document.createElement("div");
+        msg.className = "code-block";
+        msg.textContent = "No rows returned for this table with current default filters.";
+        detailTableContainer.appendChild(msg);
+        const fd = document.createElement("div");
+        fd.className = "field-details";
+        fd.innerHTML = "Field details for <code>" + tableKey + "</code> will be documented phase-wise.";
+        detailTableContainer.appendChild(fd);
+        return;
+      }
+
+      const columns = Object.keys(rows[0] || {});
+      const tbl = document.createElement("table");
+      const thead = document.createElement("thead");
+      const headRow = document.createElement("tr");
+      columns.forEach(col => {
+        const th = document.createElement("th");
+        th.textContent = col;
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      tbl.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      function renderRows() {
+        const q = (filterInput.value || "").toLowerCase();
+        tbody.innerHTML = "";
+        rows.forEach(r => {
+          const asText = JSON.stringify(r).toLowerCase();
+          if (q && !asText.includes(q)) return;
+          const tr = document.createElement("tr");
+          columns.forEach(col => {
+            const td = document.createElement("td");
+            let val = r[col];
+            if (val === null || val === undefined) val = "";
+            td.textContent = val;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      }
+      renderRows();
+      tbl.appendChild(tbody);
+      detailTableContainer.appendChild(tbl);
+
+      const fieldDetails = document.createElement("div");
+      fieldDetails.className = "field-details";
+      fieldDetails.id = "universeFieldDetails";
+      fieldDetails.innerHTML =
+        "Field details for <code>" + tableKey + "</code> – Phase 1 placeholder. " +
+        "Later we will list each column, its meaning, source, and how it is used in AI Wealth logic.";
+      detailTableContainer.appendChild(fieldDetails);
+
+      filterInput.addEventListener("input", renderRows);
+      fieldBtn.addEventListener("click", () => {
+        fieldDetails.scrollIntoView({behavior:"smooth",block:"start"});
+      });
+    } catch (e) {
+      detailBodyEl.innerHTML = "<span style='color:var(--red);'>Error loading table " + tableKey + ": " + e.message + "</span>";
+      detailTableContainer.innerHTML = "";
+    }
+  }
+  // ========== READINESS DASHBOARD – SAP-STYLE GRID ==========================
+  // =====================================================================
+  async function loadReadinessIntoDetail() {
+    // Header text at the top-right card
+    detailTitleEl.textContent = "Readiness Dashboard";
+    detailPathEl.textContent = "Node: 2.1.1.2 · Key: aiw.dev.readiness";
+    detailMetaEl.textContent = "Context: aiw.dev.readiness";
+
+    detailBodyEl.innerHTML = "Loading go_live_readiness.json…";
+    detailTableContainer.innerHTML = "";
+
+    let data;
+    try {
+      data = await fetchJson("/api/readiness/readiness");
+    } catch (e) {
+      detailBodyEl.innerHTML =
+        "<span style='color:var(--red);'>Error loading readiness: " +
+        e.message + "</span>";
+      detailTableContainer.innerHTML = "";
+      return;
+    }
+
+    const meta = data.meta || {};
+    const project = (data.projects || [])[0] || {};
+    const tasks = project.tasks || [];
+
+    // --- Technical header ---------------------------------------------------
+    const tech = document.createElement("div");
+    tech.className = "tech-header";
+    tech.innerHTML = `
+      <div class="tech-header-title">AI Wealth – Go-Live Readiness (SIM)</div>
+      <div class="tech-header-line">
+        <strong>Backend:</strong>
+        /app/backend/app_fastapi.py,
+        readiness route (e.g. <code>readiness_route.py</code>),
+        runtime JSON: <code>/opt/founderconsole/runtime/go_live_readiness.json</code>
+      </div>
+      <div class="tech-header-line">
+        <strong>Frontend:</strong>
+        /opt/founderconsole/root-ui/index.html
+        (function <code>loadReadinessIntoDetail()</code>,
+        node <code>2.1.1.2</code>)
+      </div>
+    `;
+
+    // --- Meta summary -------------------------------------------------------
+    const metaBox = document.createElement("div");
+    metaBox.className = "tech-meta-grid";
+    const metaItems = [
+      { label: "Project", value: meta.project || "" },
+      { label: "Phase", value: meta.phase || "" },
+      { label: "Env", value: meta.env || "" },
+      { label: "Version", value: meta.version || "" },
+      { label: "Total tasks", value: String(tasks.length) }
+    ];
+    metaBox.innerHTML = metaItems.map(item => `
+      <div>
+        <div class="tech-meta-label">${item.label}</div>
+        <div class="tech-meta-value">${item.value}</div>
+      </div>
+    `).join("");
+
+    const note = document.createElement("div");
+    note.className = "tech-note";
+    note.textContent =
+      "Below is a SAP-style readiness grid. Use search, filters and column headers " +
+      "to slice the tasks. Columns: Task ID, Category, Label, Phase, Priority, " +
+      "Status, Wired?, Node Key, Notes.";
+
+    detailBodyEl.innerHTML = "";
+    detailBodyEl.appendChild(tech);
+    detailBodyEl.appendChild(metaBox);
+    detailBodyEl.appendChild(note);
+
+    // --- Controls row (global search + buttons) -----------------------------
+    const controls = document.createElement("div");
+    controls.className = "readiness-controls";
+
+    const searchInput = document.createElement("input");
+    searchInput.type = "text";
+    searchInput.placeholder = "Search ID / label / category / notes…";
+
+    const btnRefresh = document.createElement("button");
+    btnRefresh.type = "button";
+    btnRefresh.className = "btn";
+    btnRefresh.textContent = "⟳ Refresh";
+    btnRefresh.onclick = () => {
+      loadReadinessIntoDetail();
+    };
+
+    const btnCsv = document.createElement("button");
+    btnCsv.type = "button";
+    btnCsv.className = "btn";
+    btnCsv.textContent = "Download CSV";
+
+    const btnJson = document.createElement("button");
+    btnJson.type = "button";
+    btnJson.className = "btn";
+    btnJson.textContent = "Download JSON";
+
+    controls.appendChild(searchInput);
+    controls.appendChild(btnRefresh);
+    controls.appendChild(btnCsv);
+    controls.appendChild(btnJson);
+
+    detailTableContainer.innerHTML = "";
+    detailTableContainer.appendChild(controls);
+
+    // --- Row count label ----------------------------------------------------
+    const rowCount = document.createElement("div");
+    rowCount.className = "readiness-rowcount";
+    rowCount.textContent = "Rows: " + tasks.length;
+    detailTableContainer.appendChild(rowCount);
+
+    // --- Table skeleton -----------------------------------------------------
+    const table = document.createElement("table");
+    table.className = "readiness-table";
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    detailTableContainer.appendChild(table);
+
+    const columns = [
+      { key: "id", label: "Task ID" },
+      { key: "category", label: "Category" },
+      { key: "label", label: "Label" },
+      { key: "phase", label: "Phase" },
+      { key: "priority", label: "Priority" },
+      { key: "status", label: "Status" },
+      { key: "wired_to_founderconsole", label: "Wired?" },
+      { key: "node_key", label: "Node Key" },
+      { key: "notes", label: "Notes" }
+    ];
+
+    // --- Build header row (click to sort) ----------------------------------
+    let sortKey = "id";
+    let sortDir = "asc";
+
+    const headerTr = document.createElement("tr");
+    columns.forEach(col => {
+      const th = document.createElement("th");
+      th.textContent = col.label;
+      th.dataset.key = col.key;
+      th.onclick = () => {
+        if (sortKey === col.key) {
+          sortDir = (sortDir === "asc" ? "desc" : "asc");
+        } else {
+          sortKey = col.key;
+          sortDir = "asc";
+        }
+        render();
+      };
+      headerTr.appendChild(th);
+    });
+    thead.appendChild(headerTr);
+
+    // --- Build filter row (per-column filters) ------------------------------
+    const filterState = {
+      id: "",
+      category: "",
+      label: "",
+      phase: "",
+      priority: "",
+      status: "",
+      wired_to_founderconsole: "",
+      node_key: "",
+      notes: ""
+    };
+
+    const filterTr = document.createElement("tr");
+    columns.forEach(col => {
+      const th = document.createElement("th");
+      let input;
+
+      if (["phase", "priority", "status", "wired_to_founderconsole"].includes(col.key)) {
+        input = document.createElement("select");
+        input.className = "readiness-filter-select";
+
+        const optAll = document.createElement("option");
+        optAll.value = "";
+        optAll.textContent = "All";
+        input.appendChild(optAll);
+
+        let values;
+        if (col.key === "wired_to_founderconsole") {
+          values = ["Yes", "No"];
+        } else {
+          values = Array.from(new Set(
+            tasks.map(t => (t[col.key] || "").toString()).filter(Boolean)
+          )).sort();
+        }
+
+        values.forEach(v => {
+          const opt = document.createElement("option");
+          opt.value = v;
+          opt.textContent = v;
+          input.appendChild(opt);
+        });
+      } else {
+        input = document.createElement("input");
+        input.type = "text";
+        input.className = "readiness-filter-input";
+        input.placeholder = "Filter…";
+      }
+
+      input.oninput = input.onchange = () => {
+        filterState[col.key] = input.value;
+        render();
+      };
+
+      th.appendChild(input);
+      filterTr.appendChild(th);
+    });
+    thead.appendChild(filterTr);
+
+    // --- Helper: sorting weights -------------------------------------------
+    const priorityWeight = {
+      "P0 – Must Have": 4,
+      "P1 – High": 3,
+      "P2 – Medium": 2,
+      "P3 – Low": 1
+    };
+    const statusWeight = {
+      "PENDING": 3,
+      "PARTIAL": 2,
+      "COMPLETE": 1
+    };
+
+    function compareRows(a, b) {
+      const k = sortKey;
+
+      if (k === "priority") {
+        const pa = priorityWeight[a.priority] ?? 0;
+        const pb = priorityWeight[b.priority] ?? 0;
+        return sortDir === "asc" ? pa - pb : pb - pa;
+      }
+      if (k === "status") {
+        const sa = statusWeight[a.status] ?? 0;
+        const sb = statusWeight[b.status] ?? 0;
+        return sortDir === "asc" ? sa - sb : sb - sa;
+      }
+      if (k === "wired_to_founderconsole") {
+        const wa = a.wired_to_founderconsole ? 1 : 0;
+        const wb = b.wired_to_founderconsole ? 1 : 0;
+        return sortDir === "asc" ? wa - wb : wb - wa;
+      }
+
+      const va = (a[k] == null ? "" : String(a[k])).toUpperCase();
+      const vb = (b[k] == null ? "" : String(b[k])).toUpperCase();
+      if (va < vb) return sortDir === "asc" ? -1 : 1;
+      if (va > vb) return sortDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // --- Render with filters + sort ----------------------------------------
+    function render() {
+      const q = (searchInput.value || "").toLowerCase();
+
+      let rows = tasks.filter(t => {
+        if (q) {
+          const hay = ((t.id || "") + " " +
+                       (t.category || "") + " " +
+                       (t.label || "") + " " +
+                       (t.notes || "")).toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+
+        for (const col of columns) {
+          const k = col.key;
+          const value = filterState[k];
+          if (!value) continue;
+
+          if (k === "wired_to_founderconsole") {
+            const wiredStr = t.wired_to_founderconsole ? "Yes" : "No";
+            if (wiredStr !== value) return false;
+          } else {
+            const cell = (t[k] == null ? "" : String(t[k])).toLowerCase();
+            if (!cell.includes(String(value).toLowerCase())) return false;
+          }
+        }
+
+        return true;
+      });
+
+      rows.sort(compareRows);
+
+      tbody.innerHTML = "";
+      rows.forEach(t => {
+        const tr = document.createElement("tr");
+
+        function addCell(text) {
+          const td = document.createElement("td");
+          td.textContent = text == null ? "" : String(text);
+          tr.appendChild(td);
+        }
+
+        addCell(t.id || "");
+        addCell(t.category || "");
+        addCell(t.label || "");
+        addCell(t.phase || "");
+        addCell(t.priority || "");
+        addCell(t.status || "");
+        addCell(t.wired_to_founderconsole ? "Yes" : "No");
+        addCell(t.node_key || "");
+        addCell(t.notes || "");
+
+        tbody.appendChild(tr);
+      });
+
+      rowCount.textContent = "Rows: " + rows.length;
+    }
+
+    // --- Download helpers ---------------------------------------------------
+    btnJson.onclick = () => {
+      const blob = new Blob([JSON.stringify(tasks, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "go_live_readiness_tasks.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    btnCsv.onclick = () => {
+      const header = columns.map(c => c.label).join(",");
+      const lines = [header];
+      tasks.forEach(t => {
+        const wiredStr = t.wired_to_founderconsole ? "Yes" : "No";
+        const rowVals = [
+          t.id || "",
+          t.category || "",
+          t.label || "",
+          t.phase || "",
+          t.priority || "",
+          t.status || "",
+          wiredStr,
+          t.node_key || "",
+          (t.notes || "").replace(/\s+/g," ")
+        ];
+        lines.push(
+          rowVals.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")
+        );
+      });
+      const blob = new Blob([lines.join("\n")], {
+        type: "text/csv;charset=utf-8;"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "go_live_readiness_tasks.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    // Initial render
+    render();
+  }
+
+
+  // ========== AI WEALTH – CORE BUSINESS BRAIN DETAIL =========================
+  async function loadCoreBusinessIntoDetail() {
+    detailBodyEl.innerHTML = "Loading AI Wealth core business brain…";
+    detailTableContainer.innerHTML = "";
+
+    try {
+      const data = await fetchJson("/api/aiwealth/core-business-v1");
+      if (!data || data.status !== "OK") {
+        detailBodyEl.innerHTML =
+          "<span style='color:var(--red);'>Core business API did not return OK.</span>";
+        detailTableContainer.innerHTML = "";
+        return;
+      }
+
+      const meta = data.meta || {};
+      const rows = data.rows || [];
+      const rowsToShow = rows.slice(0, 10);
+
+      // Meta summary for the right-hand panel
+      const metaHtml =
+        "<strong>Run Date:</strong> " + (meta.run_date || "") + "<br/>" +
+        "<strong>Environment:</strong> " + (meta.env || "") + "<br/>" +
+        "<strong>Mode:</strong> " + (meta.mode || "") + "<br/>" +
+        "<strong>Total Universe:</strong> " + (meta.total_universe ?? "") + "<br/>" +
+        "<strong>Total Candidates:</strong> " + (meta.total_candidates ?? "") + "<br/>" +
+        "<strong>Creamy Layer Count:</strong> " + (meta.creamy_layer_count ?? "") + "<br/>" +
+        "<strong>Profiles:</strong> " + ((meta.profiles || []).join(", ")) + "<br/>" +
+        "<strong>Backend URL:</strong> " + (meta.backend_url || "");
+
+      detailBodyEl.innerHTML =
+        "AI Wealth – Core Business Brain (SIM Control Run). Below is a compact view; the full brain table is in the dedicated section further down.<br/><br/>" +
+        metaHtml;
+
+      // Table of first 10 trades
+      const table = document.createElement("table");
+      table.className = "detail-table";
+
+      const thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+        "<th>Symbol</th>" +
+        "<th>Dir</th>" +
+        "<th>Entry</th>" +
+        "<th>Target</th>" +
+        "<th>Stop</th>" +
+        "<th>Exp %</th>" +
+        "<th>Downside %</th>" +
+        "<th>R:R</th>" +
+        "<th>Risk Bucket</th>" +
+        "<th>Conf</th>" +
+        "</tr>";
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+
+      rowsToShow.forEach((row) => {
+        const tr = document.createElement("tr");
+
+        function td(text) {
+          const cell = document.createElement("td");
+          cell.textContent = text == null ? "" : String(text);
+          return cell;
+        }
+
+        function tdNum(val, decimals) {
+          const cell = document.createElement("td");
+          const n = Number(val);
+          if (!Number.isFinite(n)) {
+            cell.textContent = "";
+          } else {
+            cell.textContent = n.toFixed(decimals);
+          }
+          return cell;
+        }
+
+        function tdPct(val) {
+          const cell = document.createElement("td");
+          const n = Number(val);
+          if (!Number.isFinite(n)) {
+            cell.textContent = "";
+          } else {
+            cell.textContent = n.toFixed(2) + " %";
+          }
+          return cell;
+        }
+
+        tr.appendChild(td(row.symbol));
+        tr.appendChild(td(row.direction));
+
+        tr.appendChild(tdNum(row.entry_price, 2));
+        tr.appendChild(tdNum(row.target_price, 2));
+        tr.appendChild(tdNum(row.stop_loss_price, 2));
+
+        tr.appendChild(tdPct(row.expected_return_pct));
+        tr.appendChild(tdPct(row.downside_risk_pct));
+
+        tr.appendChild(tdNum(row.rr_ratio, 2));
+        tr.appendChild(td(row.risk_bucket));
+        tr.appendChild(tdNum(row.confidence_score, 2));
+
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      detailTableContainer.innerHTML = "";
+      detailTableContainer.appendChild(table);
+    } catch (e) {
+      detailBodyEl.innerHTML =
+        "<span style='color:var(--red);'>Error loading core business API: " + e.message + "</span>";
+      detailTableContainer.innerHTML = "";
+    }
+  }
+
+    // ========== NODE SELECTION =================================================
+  function selectNode(node) {
+    activeNodeKey = node.key;
+    clearActiveLabels();
+    const labelEl = document.querySelector('.tree-node-label[data-key="' + node.key + '"]');
+    if (labelEl) labelEl.classList.add("active");
+
+    detailTitleEl.textContent = node.label;
+    detailPathEl.textContent = "Node: " + node.code + " • Key: " + node.key;
+    detailMetaEl.textContent = "Context: " + node.key;
+    detailTableContainer.innerHTML = "";
+
+    // 2.1.1.1 – Control Run – SIM Report
+    if (node.key === "aiw.dev.controlRunSim") {
+      loadAiWealthIntoDetail();
+      return;
+    }
+
+    // 8.1 – Go-Live Readiness Board
+    if (node.key === "aiw.dev.readiness" || node.key === "readiness.board") {
+      loadReadinessIntoDetail();
+      return;
+    }
+
+    // 6.1 – Security Score Dashboard
+    if (node.key === "security.score") {
+      loadSecurityIntoDetail();
+      return;
+    }
+
+    // 2.1.1.3 – Data & Universe (overview)
+    if (node.key === "aiw.dev.universe") {
+      AiwDataUniverse.showOverview();
+      return;
+    }
+
+    // 2.1.1.3.x – Universe by category
+    if (node.key.startsWith("universe.category.")) {
+      const catId = node.key.split(".").pop();
+      showUniverseCategory(catId);
+      return;
+    }
+
+    // 2.1.1.3.x – Specific universe table
+    if (node.key.startsWith("universe.table.")) {
+      const tableKey = node.key.substring("universe.table.".length);
+      loadUniverseTable(tableKey);
+      return;
+    }
+
+    // 2.1.1.9.1.x – AIW Settings (DEV)
+    if (node.key === "aiw.settings.founder") {
+      AiwSettings.showFounder();
+      return;
+    }
+    if (node.key === "aiw.settings.user") {
+      AiwSettings.showUser();
+      return;
+    }
+    if (node.key === "aiw.settings.broker") {
+      AiwSettings.showBroker();
+      return;
+    }
+
+      // 12 – AI Wealth – Core Business Brain (SIM Control Run)
+    if (node.key === "aiw.dev.coreBusiness") {
+      // Show compact brain view in the right-hand detail panel only
+      loadCoreBusinessIntoDetail();
+      return;
+    }
+
+
+    // default descriptive node
+    detailBodyEl.innerHTML =
+      "Specification node: <strong>" + node.label + "</strong>.<br/><br/>" +
+      "In Phase 1 this is a descriptive placeholder. Later we will attach dedicated tiles and tables here.";
+    detailTableContainer.innerHTML = "";
+  }
+
+
+  // ========== SEARCH IN TREE =================================================
+  document.getElementById("treeSearch").addEventListener("input", (ev) => {
+    const q = ev.target.value.toLowerCase();
+    document.querySelectorAll(".tree-node-label").forEach(el => {
+      const text = (el.dataset.label || "").toLowerCase();
+      const code = (el.dataset.code || "").toLowerCase();
+      const show = !q || text.includes(q) || code.includes(q);
+      el.style.display = show ? "flex" : "none";
+    });
+  });
+
+  // ========== INIT ===========================================================
+  (function init() {
+    renderTree(treeData, treeRootEl);
+    loadAiWealthSummary().catch(()=>{});
+    loadReadinessSummary().catch(()=>{});
+    loadSecuritySummary().catch(()=>{});
+
+    document.getElementById("btnRefreshAIW").addEventListener("click", () => {
+      loadAiWealthSummary().catch(()=>{});
+      if (activeNodeKey === "aiw.dev.controlRunSim") {
+        loadAiWealthIntoDetail().catch(()=>{});
+      }
+    });
+    document.getElementById("btnRefreshHealth").addEventListener("click", () => {
+      loadReadinessSummary().catch(()=>{});
+      loadSecuritySummary().catch(()=>{});
+      if (activeNodeKey === "readiness.board" || activeNodeKey === "aiw.dev.readiness") {
+        loadReadinessIntoDetail().catch(()=>{});
+      } else if (activeNodeKey === "security.score") {
+        loadSecurityIntoDetail().catch(()=>{});
+      }
+    });
+
+    // Default selection: 2.1.1.1 – Control Run – SIM Report
+    const defaultNode = treeData[1].children[1].children[0]; // aiw.dev.controlRunSim
+    selectNode(defaultNode);
+  })();
+</script>
+<script src="aiw-settings.js"></script>
+<script src="aiw-data-universe.js"></script>
+
+</body>
+</html>
