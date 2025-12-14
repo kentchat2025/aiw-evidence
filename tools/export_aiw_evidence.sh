@@ -58,9 +58,9 @@ cmd_to_file() {
 push_retry() {
   local tries=0
   local max="${PUSH_RETRY_MAX:-6}"
+  case "$max" in (""|*[!0-9]*) max=6;; esac
   while true; do
-    # Always push from the repo dir (even if caller cwd is different)
-    if git -C "$EVIDENCE_REPO_DIR" push; then
+    if git push; then
       return 0
     fi
     tries=$((tries+1))
