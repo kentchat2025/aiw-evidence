@@ -1,0 +1,94 @@
+from pathlib import Path
+import json
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+
+app = FastAPI(title="FounderConsole Backend – Skeleton v5")
+
+# --- CORS (keep open for now; we can tighten later) ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --- Paths ---
+BASE_PATH = Path("/opt/founderconsole")
+RUNTIME_PATH = BASE_PATH / "runtime"
+ROOT_UI_PATH = BASE_PATH / "root-ui" / "index.html"
+
+
+# ---------- ROOT UI (FounderConsole main page) ----------
+@app.get("/", response_class=HTMLResponse)
+def root_ui():
+    """
+    Serve the FounderConsole Root UI (SAP-style shell) from
+    /opt/founderconsole/root-ui/index.html
+    """
+    if ROOT_UI_PATH.exists():
+        try:
+            html = ROOT_UI_PATH.read_text(encoding="utf-8")
+            return HTMLResponse(html)
+        except Exception as e:
+            # File exists but cannot be read
+            return HTMLResponse(
+                f"<h1>FounderConsole</h1>"
+                f"<p>Error reading Root UI file: {e}</p>",
+                status_code=500,
+            )
+    # Fallback if file is missing
+    return HTMLResponse(
+        "<h1>FounderConsole</h1>"
+        "<p>Root UI file not found at /opt/founderconsole/root-ui/index.html.</p>",
+        status_code=500,
+    )
+
+
+# ---------- Simple health ----------
+@app.get("/health")
+def health():
+    return {"status": "ok", "component": "founderconsole-backend-v5"}
+
+
+# ---------- Helper to load JSON from runtime ----------
+def _load_runtime_json(filename: str):
+    path = RUNTIME_PATH / filename
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=f"{filename} not found in runtime")
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"error reading {filename}: {e}")
+
+
+# ---------- Existing API endpoints ----------
+@app.get("/api/readiness/readiness")
+def readiness():
+    """
+    Returns go-live readiness JSON written by:
+    /opt/founderconsole/tests/generate_readiness.py
+    """
+    return _load_runtime_json("go_live_readiness.json")
+
+
+@app.get("/api/aiwealth/validation")
+def aiwealth_validation():
+    """
+    Returns AI Wealth validation JSON written by:
+    /opt/founderconsole/scripts/run_aiw_validation.sh
+    """
+    return _load_runtime_json("aiw_validation_report.json")
+
+
+@app.get("/api/security/report")
+def security_report():
+    """
+    Returns security_report.json written by:
+    /opt/founderconsole/checks/verify_security.py
+    """
+    return _load_runtime_json("security_report.json")
+
