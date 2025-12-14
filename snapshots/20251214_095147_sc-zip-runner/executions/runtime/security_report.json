@@ -1,0 +1,12 @@
+{
+  "checks": [
+    {
+      "name": "nftables ruleset",
+      "ok": true
+    },
+    {
+      "name": "SSH PasswordAuthentication no",
+      "ok": true
+    }
+  ]
+}
