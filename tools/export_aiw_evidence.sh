@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# --- AIW-EVIDENCE: single-run lock (prevents index.lock + overlaps) ---
+LOCKFILE="/tmp/aiw_evidence_export.lock"
+exec 9>"$LOCKFILE" || true
+if ! flock -n 9; then
+  echo "[AIW-EVIDENCE] Another export is already running; exiting." >&2
+  exit 0
+fi
+
 
 # --- AIW_EVIDENCE_OCI_CHECK_V2: make OCI manifests work safely (no secrets) ---
 export PATH=/home/ubuntu/bin:/usr/local/bin:/usr/bin:/bin:$PATH
