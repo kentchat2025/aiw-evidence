@@ -1,0 +1,7 @@
+WARNING: Error loading config file: open /home/ubuntu/.docker/config.json: permission denied
+REPOSITORY                            TAG         IMAGE ID       CREATED       SIZE
+ai-wealth-backend-ai-wealth-backend   latest      7643c9453582   3 weeks ago   186MB
+founderconsole-backend                v1          4366c6b083ad   4 weeks ago   188MB
+jc21/nginx-proxy-manager              2           7cfcc87a404a   4 weeks ago   1.12GB
+python                                3.11-slim   328367ee15f3   5 weeks ago   150MB
+nginx                                 alpine      cbad6347cca2   6 weeks ago   53.4MB

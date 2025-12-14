@@ -1,0 +1,20 @@
+WARNING: Error loading config file: open /home/ubuntu/.docker/config.json: permission denied
+total 440
+drwxr-xr-x    2 1001     1001          4096 Dec 11 16:54 .
+drwxr-xr-x    3 root     root          4096 Oct 28 22:42 ..
+-rw-rw-r--    1 1001     1001         12884 Dec 11 09:47 aiw-brain-overview-v1.js
+-rw-r--r--    1 root     root         14972 Dec  5 10:00 aiw-core-business-v1.js
+-rw-r--r--    1 root     root         28837 Dec  2 17:58 aiw-data-universe.js
+-rw-r--r--    1 1001     1001         32224 Dec  3 15:19 aiw-settings.js
+-rw-rw-r--    1 1001     1001          7002 Dec 11 12:25 aiw_brain_overview_v1.js
+-rw-rw-r--    1 1001     1001          6261 Dec 11 10:51 aiw_brain_overview_v1_backup_2025-12-11.js
+-rw-rw-r--    1 1001     1001          4753 Dec 10 16:00 fc_techlog_tile_v1.js
+-rw-rw-r--    1 1001     1001          5913 Dec 11 12:09 fc_techlog_v1.js
+-rw-rw-r--    1 1001     1001         14622 Dec 10 16:19 fc_techlog_v1_backup_2025-12-10.js
+-rw-rw-r--    1 1001     1001          6280 Dec 11 14:51 fc_tile_common_v1.js
+-rw-rw-r--    1 1001     1001          6294 Dec 11 16:54 fc_tile_common_v1.js.save
+-rw-rw-r--    1 1001     1001         73156 Dec 11 14:34 index.html
+-rw-rw-r--    1 1001     1001         63324 Dec  8 17:02 index.html.backup.20251208-223247
+-rw-rw-r--    1 1001     1001         69329 Dec  8 17:13 index.html.readiness_fix_20251208-224350.bak
+-rw-r--r--    1 root     root             0 Dec  2 10:00 index.html.save
+-rw-rw-r--    1 1001     1001         67221 Dec  8 18:16 index.html.save.1
