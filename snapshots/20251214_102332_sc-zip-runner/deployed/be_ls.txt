@@ -1,0 +1,22 @@
+WARNING: Error loading config file: open /home/ubuntu/.docker/config.json: permission denied
+total 284
+drwxr-xr-x 1 root root  4096 Dec 11 08:49 .
+drwxr-xr-x 1 root root  4096 Nov 28 16:58 ..
+drwxr-xr-x 1 root root  4096 Dec 11 08:49 __pycache__
+-rw-rw-r-- 1 1001 1001 21278 Dec  1 13:59 aiw-settings.js
+-rw-rw-r-- 1 1001 1001  5156 Dec 11 07:57 aiw_brain_instrument_api_v1.py
+-rw-rw-r-- 1 1001 1001  6774 Dec 11 08:15 aiw_brain_profile_api_v1.py
+-rw-rw-r-- 1 1001 1001  4644 Dec 11 08:48 aiw_brain_runlog_api_v1.py
+-rw-r--r-- 1 root root 10199 Nov 26 18:01 aiw_data_universe_v1.py
+-rw-r--r-- 1 root root  6194 Dec  3 04:55 aiw_settings_api.py
+-rw-rw-r-- 1 1001 1001  5790 Dec  8 05:25 app_aiw_core_business_v1.py
+-rw-r--r-- 1 1001 1001 17577 Dec 11 08:43 app_fastapi.py
+-rw-r--r-- 1 root root  9999 Dec  6 15:23 app_fastapi_before_core_business_20251206.py
+-rw-r--r-- 1 root root 23038 Nov 22 09:11 es
+-rw-rw-r-- 1 1001 1001  9820 Dec 10 10:02 fc_techlog_registry_v1.py
+-rw-r--r-- 1 1001 1001 40673 Dec  1 06:57 index.html
+-rw-r--r-- 1 root root 40673 Dec  1 14:19 index.html.bak_20251201
+-rw-r--r-- 1 root root 27545 Dec  9 14:36 readiness_route.py
+drwxr-xr-x 2 root root  4096 Nov 17 18:21 runtime
+drwxr-xr-x 2 root root  4096 Dec  6 16:15 static
+-rw-rw-r-- 1 1001 1001  2080 Dec 10 17:26 techlog_routes_v1.py
