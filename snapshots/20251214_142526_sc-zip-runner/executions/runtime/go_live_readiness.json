@@ -1,0 +1,459 @@
+{
+  "status": "OK",
+  "meta": {
+    "project": "KenTechIT – FounderConsole / AI Wealth",
+    "phase": "Control Run v1",
+    "env": "SIM",
+    "version": "readiness-brain-v1"
+  },
+  "projects": [
+    {
+      "key": "AI_WEALTH_SIM",
+      "label": "AI Wealth – SIM Control Run",
+      "node_key": "aiw.dev.readiness",
+      "tasks": [
+        {
+          "id": "AIW-CORE-001",
+          "category": "Control Run \u2013 SIM",
+          "label": "Control Run JSON + table API wired",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": true,
+          "status": "COMPLETE",
+          "notes": "/api/aiwealth/validation and /api/aiwealth/validation/table wired to node 2.1.1.1."
+        },
+        {
+          "id": "AIW-CORE-002",
+          "category": "Core Business Brain \u2013 SIM",
+          "label": "Core Business Brain API + UI helper",
+          "node_key": "aiw.dev.coreBusiness",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": true,
+          "status": "COMPLETE",
+          "notes": "/api/aiwealth/core-business-v1 and /api/aiwealth/core-business-v1.js wired to menu 12."
+        },
+        {
+          "id": "AIW-CORE-003",
+          "category": "Control Run \u2013 SIM",
+          "label": "Daily control-run script & validation wiring",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PARTIAL",
+          "notes": "Shell scripts exist under /opt/founderconsole/scripts; integration into holiday-aware scheduler pending."
+        },
+        {
+          "id": "AIW-CORE-004",
+          "category": "Control Run \u2013 SIM",
+          "label": "IST-correct run_date and timestamps everywhere",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PARTIAL",
+          "notes": "Date/time bug identified; needs final validation that all reports and schedulers use IST consistently."
+        },
+        {
+          "id": "AIW-CORE-005",
+          "category": "Control Run \u2013 SIM",
+          "label": "Simulation = production-equivalent logic (minus cash)",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Control run must behave like full production including broker wiring, limits and approvals; umbrella task."
+        },
+        {
+          "id": "AIW-CORE-006",
+          "category": "Universe Coverage",
+          "label": "Universe loader for all NSE EQ symbols (2194+)",
+          "node_key": "aiw.dev.universe",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": true,
+          "status": "PARTIAL",
+          "notes": "Initial universe & metrics present; needs cross-check vs NSE list and hooks for MF/F&O later."
+        },
+        {
+          "id": "AIW-CORE-007",
+          "category": "Universe Coverage",
+          "label": "Creamy layer selection & ranking logic",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PARTIAL",
+          "notes": "Currently selects 200; need beyond-benchmark filters, buckets and richer explainability."
+        },
+        {
+          "id": "AIW-DATA-001",
+          "category": "Data & Universe",
+          "label": "Universe & dictionary tables wired",
+          "node_key": "aiw.dev.universe",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": true,
+          "status": "PARTIAL",
+          "notes": "Data & Universe router and main overview table wired; more tables and filters pending."
+        },
+        {
+          "id": "AIW-DATA-002",
+          "category": "Data & Universe",
+          "label": "Per-table views with SAP-style filters/sort/layout",
+          "node_key": "aiw.dev.universe",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": true,
+          "status": "PENDING",
+          "notes": "Universe tables need column filters, sorting and layout presets like SAP ALV grid."
+        },
+        {
+          "id": "AIW-DATA-003",
+          "category": "Data & Universe",
+          "label": "Historical price / backtest data wiring",
+          "node_key": "aiw.dev.universe",
+          "phase": "Phase 2 \u2013 Backtests & Learning",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Stable loaders for multi-year OHLCV used by simulation, backtests and self-learning engine."
+        },
+        {
+          "id": "AIW-INFRA-001",
+          "category": "Infra & Buckets",
+          "label": "All ZIPs & images normalized under bucket engine",
+          "node_key": null,
+          "phase": "Phase 0 \u2013 Infra Baseline",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PARTIAL",
+          "notes": "Relocate old ZIPs, normalize folder names and keep Supercoder + AI Wealth artefacts consistent."
+        },
+        {
+          "id": "AIW-INFRA-002",
+          "category": "Infra & Buckets",
+          "label": "Supercoder watcher + timers stable for AI Wealth",
+          "node_key": null,
+          "phase": "Phase 0 \u2013 Infra Baseline",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PARTIAL",
+          "notes": "ZIP watcher/services run reliably, no permission issues, unit tests green for AI Wealth pipeline."
+        },
+        {
+          "id": "AIW-INFRA-003",
+          "category": "Infra & Buckets",
+          "label": "Observability for AI Wealth (Loki/Prom/Grafana)",
+          "node_key": null,
+          "phase": "Phase 0 \u2013 Infra Baseline",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Fresh logs focused on current runs; dashboards for control run, failures and performance."
+        },
+        {
+          "id": "AIW-APPROVAL-001",
+          "category": "Approvals",
+          "label": "Creamy-layer approvals dashboard working end-to-end",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": true,
+          "status": "PARTIAL",
+          "notes": "Table shows generated signals with filters/sort; actions still SIM-only and not hitting brokers."
+        },
+        {
+          "id": "AIW-GUARD-001",
+          "category": "AI Wealth Guardian",
+          "label": "Manual approval first, then auto-approve toggle",
+          "node_key": "aiw.dev.controlRunSim",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Guardian logic to respect profile, risk bucket and limits; auto mode only after stable manual period."
+        },
+        {
+          "id": "AIW-SCHED-001",
+          "category": "Scheduler",
+          "label": "Weekday control-run scheduler (24\u00d75, pre-open)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Scheduler triggers control run before market open with configurable time window."
+        },
+        {
+          "id": "AIW-SCHED-002",
+          "category": "Scheduler",
+          "label": "Indian holiday-aware scheduler (NSE/BSE calendar)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Skips weekends and official market holidays; keeps logs and next-run preview tile."
+        },
+        {
+          "id": "AIW-BROKER-001",
+          "category": "Broker Wiring",
+          "label": "Zerodha token + session stable for SIM control run",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PARTIAL",
+          "notes": "auto_token_refresher.py works; .env wiring correct; safe retry logic without manual babysitting."
+        },
+        {
+          "id": "AIW-BROKER-002",
+          "category": "Broker Wiring",
+          "label": "Broker abstraction layer ready for other brokers",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Expansion",
+          "priority": "P2 \u2013 Medium",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Common OMS adapter ready so Samco/GlobalCapital/others can plug in after Zerodha path is stable."
+        },
+        {
+          "id": "AIW-RISK-001",
+          "category": "Risk & Limits",
+          "label": "Max loss / per-trade / exposure limits enforced",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Limits exist in settings; enforcement across generation, approvals and execution still to be wired."
+        },
+        {
+          "id": "AIW-RISK-002",
+          "category": "Risk & Limits",
+          "label": "Bucket engine (Conservative/Balanced/Aggressive/Ultra)",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Risk Engine",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Central engine computes and explains bucket per trade and per portfolio with AI reasons."
+        },
+        {
+          "id": "AIW-NOTIFY-001",
+          "category": "Notifications",
+          "label": "Email + WhatsApp alerts for approvals & errors",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Parallel notifications via email + WhatsApp for daily reports, failures, and approval queues."
+        },
+        {
+          "id": "AIW-LIC-001",
+          "category": "Licensing & Billing",
+          "label": "Razorpay-linked licensing for AI Wealth SIM",
+          "node_key": "licensing.hub",
+          "phase": "Phase 2 \u2013 Monetisation",
+          "priority": "P2 \u2013 Medium",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Licences validated via Razorpay success; Founder can see counts, revenue and enable/disable access."
+        },
+        {
+          "id": "AIW-UAT-001",
+          "category": "UAT \u2013 End-to-End",
+          "label": "Dry-run #1 \u2013 Signals only (no broker calls)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Validate signals, risk, buckets and dashboards without reaching broker endpoints."
+        },
+        {
+          "id": "AIW-UAT-002",
+          "category": "UAT \u2013 End-to-End",
+          "label": "Dry-run #2 \u2013 Full path via SIM broker",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Repeat P&L path with simulated orders; ensure audit trail and reconciliation are correct."
+        },
+        {
+          "id": "AIW-UAT-003",
+          "category": "UAT \u2013 Checklist",
+          "label": "Release readiness checklist completed",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "All critical items signed off (infra, data, risk, approvals, broker, monitoring)."
+        },
+        {
+          "id": "AIW-CUT-001",
+          "category": "Cutover",
+          "label": "Deploy build via Supercoder ZIP (frozen v1)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Frozen v1 ZIP tagged and deployed via watcher; rollback ZIP available."
+        },
+        {
+          "id": "AIW-CUT-002",
+          "category": "Cutover",
+          "label": "Blue/Green style traffic flip for AI Wealth endpoints",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Hardening",
+          "priority": "P2 \u2013 Medium",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Ability to route traffic between old and new versions with quick rollback."
+        },
+        {
+          "id": "AIW-CUT-003",
+          "category": "Cutover",
+          "label": "Founder handover & Green/Yellow/Red tiles wired",
+          "node_key": "aiw.dev.readiness",
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "FounderConsole shows clear status tiles so you can approve or hold go-live."
+        },
+        {
+          "id": "AIW-CUT-004",
+          "category": "Compliance & Audit",
+          "label": "SEBI-style disclaimer, logs & audit views",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Compliance",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Legal text, risk warnings and audit log views exposed for review and export."
+        },
+        {
+          "id": "AIW-MILE-TECH",
+          "category": "Milestones \u2013 Dates",
+          "label": "Technical go-live date locked & communicated",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "All services (AI Wealth, FounderConsole, Supercoder) stable for control run on agreed technical date."
+        },
+        {
+          "id": "AIW-MILE-STAB",
+          "category": "Milestones \u2013 Dates",
+          "label": "Stabilisation window (smoke + sanity passes)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Dedicated 1\u20132 week window where smoke tests, sanity checks and bugfixes are prioritised."
+        },
+        {
+          "id": "AIW-MILE-BUS",
+          "category": "Milestones \u2013 Dates",
+          "label": "Business go-live date & approvals",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Formal approval from Founder after readiness dashboard is GREEN and control run is stable."
+        },
+        {
+          "id": "AIW-TEST-EQ-CASES",
+          "category": "Testing \u2013 Equities",
+          "label": "Generate \u226510,000 automated test cases (EQ)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Full 10k+ test case catalogue for equities signals, risk and approvals."
+        },
+        {
+          "id": "AIW-TEST-EQ-RUNS",
+          "category": "Testing \u2013 Equities",
+          "label": "Run & pass \u226510,000 test cases (EQ)",
+          "node_key": null,
+          "phase": "Phase 1 \u2013 Control Run v1",
+          "priority": "P0 \u2013 Must Have",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Execution of the EQ test pack with clear pass/fail stats on FounderConsole."
+        },
+        {
+          "id": "AIW-TEST-FO-CASES",
+          "category": "Testing \u2013 F&O",
+          "label": "Generate \u226510,000 automated test cases (F&O)",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Derivatives",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Test catalogue for options/futures scenarios, margin & hedging."
+        },
+        {
+          "id": "AIW-TEST-FO-RUNS",
+          "category": "Testing \u2013 F&O",
+          "label": "Run & pass \u226510,000 test cases (F&O)",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Derivatives",
+          "priority": "P1 \u2013 High",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Execution of the F&O test pack with detailed reports."
+        },
+        {
+          "id": "AIW-TEST-MF-CASES",
+          "category": "Testing \u2013 Mutual Funds",
+          "label": "Generate \u226510,000 automated test cases (MF/SIP)",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 MF & Other",
+          "priority": "P2 \u2013 Medium",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Test catalogue for MF/SIP recommendations and rebalancing."
+        },
+        {
+          "id": "AIW-TEST-MF-RUNS",
+          "category": "Testing \u2013 Mutual Funds",
+          "label": "Run & pass \u226510,000 test cases (MF/SIP)",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 MF & Other",
+          "priority": "P2 \u2013 Medium",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Execution of the MF/SIP test pack with success percentage visible in dashboard."
+        },
+        {
+          "id": "AIW-MESH-001",
+          "category": "Architecture \u2013 Mesh",
+          "label": "Hybrid multi-supercoder mesh for AI Wealth",
+          "node_key": null,
+          "phase": "Phase 2 \u2013 Expansion",
+          "priority": "P2 \u2013 Medium",
+          "wired_to_founderconsole": false,
+          "status": "PENDING",
+          "notes": "Per-instrument Supercoder mesh (Equities, F&O, MF, etc.) coordinated by central core as agreed."
+        }
+      ]
+    }
+  ]
+}
+
