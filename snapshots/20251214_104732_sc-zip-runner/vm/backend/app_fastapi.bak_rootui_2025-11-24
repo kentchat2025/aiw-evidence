@@ -1,0 +1,487 @@
+from pathlib import Path
+import json
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+
+app = FastAPI(title="FounderConsole Backend – Root UI + APIs v1")
+
+# --- CORS (keep simple for now) ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+BASE_PATH = Path("/opt/founderconsole")
+RUNTIME_PATH = BASE_PATH / "runtime"
+
+
+# ========================
+# ROOT HTML – FOUNDERCONSOLE
+# ========================
+
+ROOT_HTML = """
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>FounderConsole – Root</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg:#020617;
+      --panel:#020617;
+      --panel2:#020617;
+      --card:#020617;
+      --border:#1f2937;
+      --fg:#e5e7eb;
+      --muted:#9ca3af;
+      --accent:#38bdf8;
+      --accent-soft:#0f172a;
+      --danger:#f97373;
+      --green:#22c55e;
+      --yellow:#eab308;
+      --red:#ef4444;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left,#0f172a 0,#020617 45%,#000 100%);
+      color:var(--fg);
+      min-height:100vh;
+    }
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 18px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(90deg,#020617 0,#030712 40%,#020617 100%);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .logo {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:18px;
+      font-weight:600;
+    }
+    .logo-badge {
+      width:32px;height:32px;
+      border-radius:999px;
+      background:radial-gradient(circle,#38bdf8,#22c55e);
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;
+    }
+    .tagline {
+      font-size:12px;
+      color:var(--muted);
+    }
+    .pill {
+      border-radius:999px;
+      border:1px solid #1f2937;
+      padding:4px 10px;
+      font-size:11px;
+      color:var(--muted);
+      background:#020617;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    main {
+      display:grid;
+      grid-template-columns:280px minmax(0,1.5fr) minmax(0,1.6fr);
+      gap:14px;
+      padding:14px 14px 18px;
+    }
+    @media (max-width: 1100px) {
+      main { grid-template-columns:1fr; }
+    }
+    .panel {
+      background:var(--panel);
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.25);
+      padding:12px 14px;
+      box-shadow:0 10px 30px rgba(15,23,42,0.65);
+    }
+    .panel h2 {
+      margin:0 0 8px;
+      font-size:14px;
+      letter-spacing:0.03em;
+      text-transform:uppercase;
+      color:#e5e7eb;
+    }
+    .panel small { color:var(--muted); }
+
+    /* Tree */
+    .tree-root-title {
+      font-weight:600;
+      margin-bottom:6px;
+      font-size:13px;
+    }
+    .tree {
+      font-size:12px;
+      line-height:1.45;
+      max-height:72vh;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .tree ul {
+      list-style:none;
+      padding-left:14px;
+      margin:0;
+    }
+    .tree li {
+      margin:2px 0;
+      padding-left:6px;
+      border-left:1px dashed rgba(75,85,99,0.7);
+      position:relative;
+    }
+    .tree li::before {
+      content:"";
+      position:absolute;
+      left:-1px;
+      top:10px;
+      width:6px;
+      border-top:1px dashed rgba(75,85,99,0.7);
+    }
+    .tree-label {
+      cursor:default;
+      color:var(--muted);
+    }
+    .tree-label strong {
+      color:#e5e7eb;
+      font-weight:600;
+    }
+    .tree-section {
+      margin-top:6px;
+      padding-top:4px;
+      border-top:1px solid rgba(30,64,175,0.35);
+    }
+
+    /* Status strip */
+    .status-strip {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      font-size:11px;
+      margin-bottom:6px;
+    }
+    .badge {
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.4);
+      background:rgba(15,23,42,0.85);
+      color:var(--muted);
+    }
+    .badge-dot {
+      width:6px;height:6px;border-radius:999px;
+      margin-right:4px;
+      display:inline-block;
+    }
+    .dot-green { background:var(--green); }
+    .dot-yellow { background:var(--yellow); }
+    .dot-red { background:var(--red); }
+
+    /* Tables */
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+      margin-top:8px;
+    }
+    th, td {
+      border-bottom:1px solid rgba(15,23,42,0.9);
+      padding:5px 6px;
+      text-align:left;
+    }
+    th {
+      font-size:11px;
+      text-transform:uppercase;
+      color:var(--muted);
+      letter-spacing:0.05em;
+      background:#020617;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+    tbody tr:hover {
+      background-color:rgba(15,23,42,0.9);
+    }
+
+    .chip {
+      border-radius:999px;
+      padding:1px 7px;
+      font-size:11px;
+      border:1px solid rgba(148,163,184,0.4);
+      color:var(--muted);
+    }
+    .chip-ok { border-color:var(--green); color:var(--green); }
+    .chip-warn { border-color:var(--yellow); color:var(--yellow); }
+
+    .section-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin-bottom:4px;
+    }
+    .section-header-right {
+      font-size:11px;
+      color:var(--muted);
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+
+    .pill-link {
+      text-decoration:none;
+      color:var(--accent);
+      font-size:11px;
+    }
+    .pill-link:hover { text-decoration:underline; }
+
+    .muted { color:var(--muted); font-size:12px; }
+    .danger { color:var(--danger); }
+
+    .small-note { font-size:10px;color:var(--muted);margin-top:4px; }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas; font-size:11px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-badge">K</div>
+    <div>
+      <div>FounderConsole • KenTechIT</div>
+      <div class="tagline">Exponential profits • Zero-loss guardrails • AI-first governance</div>
+    </div>
+  </div>
+  <div class="pill">
+    <span style="width:6px;height:6px;border-radius:999px;background:#22c55e;"></span>
+    Core Mode: <strong>Control Run / Governance</strong>
+  </div>
+</header>
+
+<main>
+  <!-- LEFT: ROOT SAP-STYLE TREE -->
+  <section class="panel">
+    <div class="tree-root-title">/FOUNDERCONSOLE – Root Tree</div>
+    <div class="tree">
+      <ul>
+        <li><span class="tree-label"><strong>1. Home &amp; Overview</strong></span>
+          <ul>
+            <li><span class="tree-label">1.1 Founder Home Dashboard</span></li>
+            <li><span class="tree-label">1.2 Green / Yellow / Red Status Board</span></li>
+            <li><span class="tree-label">1.3 Today’s AI Suggestions (All Projects)</span></li>
+            <li><span class="tree-label">1.4 Quick Links – AI Wealth / ERP / Supercoder / Security</span></li>
+          </ul>
+        </li>
+
+        <li class="tree-section"><span class="tree-label"><strong>2. Projects (SAP-style)</strong></span>
+          <ul>
+            <li><span class="tree-label"><strong>2.1 AI Wealth Generator</strong> (DEV / PROD)</span></li>
+            <li><span class="tree-label"><strong>2.2 ERP AI Intelligence</strong> (DEV / PROD)</span></li>
+            <li><span class="tree-label"><strong>2.3 Price Engine</strong> (DEV / PROD)</span></li>
+            <li><span class="tree-label"><strong>2.4 Pricing Genie</strong> (DEV / PROD)</span></li>
+            <li><span class="tree-label"><strong>2.5 Digital Marketing Automation</strong> (DEV / PROD)</span></li>
+            <li><span class="tree-label"><strong>2.6 Personal Website / Brand</strong> (DEV / PROD)</span></li>
+            <li><span class="tree-label"><strong>2.7 Bharadwaj Avatar</strong> (DEV / PROD)</span></li>
+          </ul>
+        </li>
+
+        <li class="tree-section"><span class="tree-label"><strong>3. Licensing &amp; Billing Hub</strong></span></li>
+        <li><span class="tree-label"><strong>4. Pain Points &amp; Monetization Board</strong></span></li>
+        <li><span class="tree-label"><strong>5. Supercoder &amp; Infrastructure</strong></span></li>
+        <li><span class="tree-label"><strong>6. Security &amp; Compliance</strong></span></li>
+        <li><span class="tree-label"><strong>7. AI Constitution &amp; Brain</strong></span></li>
+        <li><span class="tree-label"><strong>8. Readiness &amp; Testing</strong></span></li>
+        <li><span class="tree-label"><strong>9. Notifications &amp; Channels</strong></span></li>
+        <li><span class="tree-label"><strong>10. Global Settings</strong></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MIDDLE: GO-LIVE READINESS (from /api/readiness/readiness) -->
+  <section class="panel" id="readiness-panel">
+    <div class="section-header">
+      <h2>Go-Live Readiness (JSON → Tile)</h2>
+      <div class="section-header-right">
+        <span id="readiness-run-date" class="chip chip-ok">Loading…</span>
+        <a class="pill-link" href="/api/readiness/readiness" target="_blank">Raw JSON</a>
+      </div>
+    </div>
+    <div class="status-strip">
+      <div class="badge"><span class="badge-dot dot-green"></span><span id="ready-green">G: –</span></div>
+      <div class="badge"><span class="badge-dot dot-yellow"></span><span id="ready-yellow">Y: –</span></div>
+      <div class="badge"><span class="badge-dot dot-red"></span><span id="ready-red">R: –</span></div>
+      <div class="badge">Coverage: <span id="ready-coverage">– %</span></div>
+    </div>
+    <div id="readiness-body" class="muted">Waiting for readiness JSON…</div>
+    <div class="small-note">
+      Source: <code>/api/readiness/readiness &rarr; go_live_readiness.json</code>
+    </div>
+  </section>
+
+  <!-- RIGHT: AI WEALTH – CONTROL RUN (from /api/aiwealth/validation) -->
+  <section class="panel">
+    <div class="section-header">
+      <h2>AI Wealth – Control Run (SIM)</h2>
+      <div class="section-header-right">
+        <span class="chip chip-warn" id="aiw-summary-pill">Universe: –, Creamy: –</span>
+        <a class="pill-link" href="/api/aiwealth/validation" target="_blank">JSON</a>
+        <a class="pill-link" href="/api/aiwealth/validation/table" target="_blank">Table API</a>
+      </div>
+    </div>
+    <div class="muted" id="aiw-meta">Loading latest simulation control run…</div>
+    <table id="aiw-table">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Dir</th>
+          <th>Entry</th>
+          <th>Target</th>
+          <th>SL</th>
+          <th>Bucket</th>
+          <th>Approve?</th>
+        </tr>
+      </thead>
+      <tbody id="aiw-rows">
+      </tbody>
+    </table>
+    <div class="small-note">
+      This tile shows only SIM creamy-layer candidates for manual approval (no live trades here).
+    </div>
+  </section>
+</main>
+
+<script>
+async function loadReadiness() {
+  const elBody = document.getElementById("readiness-body");
+  const pill = document.getElementById("readiness-run-date");
+  const gEl = document.getElementById("ready-green");
+  const yEl = document.getElementById("ready-yellow");
+  const rEl = document.getElementById("ready-red");
+  const covEl = document.getElementById("ready-coverage");
+  try {
+    const res = await fetch("/api/readiness/readiness");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const summary = data.summary || {};
+    pill.textContent = summary.run_date ? ("Run: " + summary.run_date) : "Ready";
+    gEl.textContent = "G: " + (summary.green_count ?? "–");
+    yEl.textContent = "Y: " + (summary.yellow_count ?? "–");
+    rEl.textContent = "R: " + (summary.red_count ?? "–");
+    covEl.textContent = (summary.coverage_percent ?? "–") + " %";
+    elBody.textContent = summary.message || "Readiness JSON loaded.";
+  } catch (e) {
+    pill.textContent = "Error";
+    elBody.innerHTML = "<span class='danger'>Unable to load readiness JSON (" + e + ")</span>";
+  }
+}
+
+async function loadAIWealth() {
+  const meta = document.getElementById("aiw-meta");
+  const pill = document.getElementById("aiw-summary-pill");
+  const rowsEl = document.getElementById("aiw-rows");
+  rowsEl.innerHTML = "";
+  try {
+    const res = await fetch("/api/aiwealth/validation");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const summary = data.summary || {};
+    const trades = data.proposed_trades || [];
+    pill.textContent =
+      "Date: " + (summary.run_date || "–") +
+      " • Universe: " + (summary.total_universe ?? "–") +
+      " • Creamy: " + (summary.creamy_layer_count ?? "–") +
+      " • Samples: " + trades.length;
+    meta.textContent =
+      "ENV=" + (summary.env || "SIM") +
+      " • Profiles: " + JSON.stringify(summary.profiles || []) +
+      " • This is SIM-only; manual approval only.";
+    trades.forEach((t) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (t.symbol || "") + "</td>" +
+        "<td>" + (t.direction || "") + "</td>" +
+        "<td>" + (t.entry_price ?? "") + "</td>" +
+        "<td>" + (t.target_price ?? "") + "</td>" +
+        "<td>" + (t.stop_loss ?? "") + "</td>" +
+        "<td>" + (t.risk_bucket || "") + "</td>" +
+        "<td>" + (t.show_for_manual_approval ? "Review" : "-") + "</td>";
+      rowsEl.appendChild(tr);
+    });
+    if (!trades.length) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = "<td colspan='7' class='muted'>No proposed trades in SIM creamy layer.</td>";
+      rowsEl.appendChild(tr);
+    }
+  } catch (e) {
+    pill.textContent = "Error loading AIW JSON";
+    meta.innerHTML = "<span class='danger'>Failed to load /api/aiwealth/validation (" + e + ")</span>";
+  }
+}
+
+loadReadiness();
+loadAIWealth();
+</script>
+</body>
+</html>
+"""
+
+
+# ========================
+# API ENDPOINTS
+# ========================
+
+@app.get("/", response_class=HTMLResponse)
+def root_ui():
+    """Root FounderConsole HTML UI."""
+    return HTMLResponse(ROOT_HTML)
+
+
+@app.get("/health")
+def health():
+    """Simple JSON health check."""
+    return {
+        "service": "founderconsole-backend",
+        "module": "root-ui-and-apis",
+        "status": "ok",
+    }
+
+
+def _load_runtime_json(filename: str):
+    path = RUNTIME_PATH / filename
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=f"{filename} not found in runtime")
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"error reading {filename}: {e}")
+
+
+@app.get("/api/readiness/readiness")
+def readiness():
+    """Return go-live readiness JSON."""
+    return _load_runtime_json("go_live_readiness.json")
+
+
+@app.get("/api/aiwealth/validation")
+def aiwealth_validation():
+    """Return AI Wealth validation report JSON."""
+    return _load_runtime_json("aiw_validation_report.json")
+
+
+@app.get("/api/security/report")
+def security_report():
+    """Return security report JSON."""
+    return _load_runtime_json("security_report.json")
+
