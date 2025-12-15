@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # --- AIW-EVIDENCE: single-run lock (prevents index.lock + overlaps) ---
-LOCKFILE="/tmp/aiw_evidence_export.lock"
-exec 9>"$LOCKFILE" || true
+# Prefer a lock inside the repo (always writable for ubuntu), allow override via env
+LOCKFILE="${AIW_EVIDENCE_LOCKFILE:-/opt/aiw-evidence/.locks/aiw_evidence_export.lock}"
+mkdir -p "$(dirname "$LOCKFILE")"
+touch "$LOCKFILE"
+exec 9>"$LOCKFILE"
 if ! flock -n 9; then
   echo "[AIW-EVIDENCE] Another export is already running; exiting." >&2
   exit 0

@@ -1,0 +1,8 @@
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED       STATUS       PORTS                                                                                      NAMES
+88e85ac83c38   nginx:alpine                          "/docker-entrypoint.…"   2 weeks ago   Up 13 days   80/tcp                                                                                     fc-root-ui
+0d2abd7f57b8   ai-wealth-backend-ai-wealth-backend   "uvicorn aiw_backend…"   3 weeks ago   Up 3 weeks   0.0.0.0:7087->8000/tcp, [::]:7087->8000/tcp                                                ai-wealth-backend
+f82edcc12a75   founderconsole-backend:v1             "python3 -m uvicorn …"   4 weeks ago   Up 4 days                                                                                               founderconsole-backend
+c29b4ee55f6b   jc21/nginx-proxy-manager:2            "/init"                  4 weeks ago   Up 2 weeks   0.0.0.0:80-81->80-81/tcp, [::]:80-81->80-81/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp   npm-app-1
+4d5840f16d62   python:3.11-slim                      "sh -c 'pip install …"   5 weeks ago   Up 4 weeks   0.0.0.0:7098->8080/tcp, [::]:7098->8080/tcp                                                fc-ai-summary-viewer
+cc867a8bc040   python:3.11-slim                      "sh -c 'pip install …"   5 weeks ago   Up 4 weeks   0.0.0.0:7099->8080/tcp, [::]:7099->8080/tcp                                                fc-license-stub
+fbb9a644e3c7   nginx:alpine                          "/docker-entrypoint.…"   5 weeks ago   Up 4 weeks   0.0.0.0:7097->80/tcp, [::]:7097->80/tcp                                                    fc-daily-updates
